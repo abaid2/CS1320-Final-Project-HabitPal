@@ -1,1 +1,1 @@
-# CS1320-Final-Project---HabitPal
+# CS1320-Final-Project-HabitPal
