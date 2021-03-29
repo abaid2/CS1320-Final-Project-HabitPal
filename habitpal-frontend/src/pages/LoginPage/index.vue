@@ -1,5 +1,5 @@
 <template>
-  <div class="loginpage">
+  <div>
     <h1>Welcome to HabitPal!</h1>
     <LoginForm />
   </div>
@@ -23,8 +23,4 @@ h1 {
     font-size: 60px;
 }
 
-.loginpage {
-    display: flex;
-    flex-direction: column;
-}
 </style>

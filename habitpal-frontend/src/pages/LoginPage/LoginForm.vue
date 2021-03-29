@@ -12,7 +12,7 @@
                     <input type="password" name="password" class="form-control logininput" />
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-primary logininput">Login</button>
+                    <router-link to="/home" class="btn btn-primary logininput">Login</router-link>
                 </div>
             </div>
         </form>
