@@ -1,4 +1,4 @@
-export const habitsTemplate = [
+const habitsTemplate = [
 {
     id: 1,
     title: 'run',
@@ -15,3 +15,7 @@ export const habitsTemplate = [
     description: 'practice drawing for 1 hour everyday'
 }
 ];
+
+module.exports = {
+    habitsTemplate
+};

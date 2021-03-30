@@ -9,22 +9,54 @@
 
 <script>
 import Habit from '../../components/Habit';
-import {habitsTemplate} from '../../data/habits';
+import axios from 'axios';
+
+
+
+async function getHabits() {
+  return new Promise((resolve, reject) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*',
+      }
+    }
+
+    axios.get('http://localhost:8080/habits', config, {
+      params: {
+        userId: 0
+      }
+    })
+    .then(res => {
+      console.log(res.data);
+      resolve(res.data);
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
+
 
 export default {
   name: 'HomePage',
   data: function() {
     return {
-      habits: habitsTemplate
+      habits: []
     };
   },
   components: {
     Habit
+  },
+  created: async function() {
+    getHabits()
+      .then(res => this.habits = res)
+      .catch(err => console.log(err));
   }
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
+<!-- "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1 {
     margin-top: 100px;
