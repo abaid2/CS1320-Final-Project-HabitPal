@@ -11,8 +11,6 @@
 import Habit from '../../components/Habit';
 import axios from 'axios';
 
-
-
 async function getHabits() {
   return new Promise((resolve, reject) => {
     const config = {

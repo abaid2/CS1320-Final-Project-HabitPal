@@ -14,6 +14,9 @@
                 <div class="form-group">
                     <router-link to="/home" class="btn btn-primary logininput">Login</router-link>
                 </div>
+                <div class="form-group">
+                    <router-link to="/register" class="link-primary logininput">Sign up</router-link>
+                </div>
             </div>
         </form>
     </div>
