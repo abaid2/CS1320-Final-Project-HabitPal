@@ -23,7 +23,8 @@ const userSchema = mongoose.Schema({
   },
   token: {
     type: String
-  }
+  },
+  habits: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Habit' }]
 });
 
 //saving user data
