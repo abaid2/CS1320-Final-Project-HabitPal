@@ -1,18 +1,21 @@
 <template>
     <div class="loginbody">
         <h2>Login</h2>
-        <form class="loginform">
+        <form @submit.prevent="handleLogin" class="loginform">
             <div class="loginitems">
                 <div class="form-group">
-                    <label for="username">Username</label>
-                    <input type="text" name="username" class="form-control logininput" />
+                    <label for="email">Email</label>
+                    <input type="text" v-model="email" name="email" class="form-control logininput" />
+                    <div v-show="submitted && !email" class="invalid-feedback">Email is required</div>
                 </div>
                 <div class="form-group logininput">
                     <label htmlFor="password">Password</label>
-                    <input type="password" name="password" class="form-control logininput" />
+                    <input type="password" v-model="password" name="password" class="form-control logininput" />
+                    <div v-show="submitted && !password" class="invalid-feedback">Password is required</div>
+                    <div v-show="email && password && !valid" class="invalid-feedback">Invalid login</div>
                 </div>
                 <div class="form-group">
-                    <router-link to="/home" class="btn btn-primary logininput">Login</router-link>
+                    <button class="btn btn-primary logininput">Login</button>
                 </div>
                 <div class="form-group">
                     <router-link to="/register" class="link-primary logininput">Sign up</router-link>
@@ -23,8 +26,62 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+async function signIn(email, password) {
+  return new Promise((resolve, reject) => {
+    const toSend = {
+      email: email,
+      password: password
+    }; 
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*',
+      }
+    }
+
+    axios.post(
+        'http://localhost:8080/users/login',
+        JSON.stringify(toSend),
+        config
+    )
+    .then(res => {
+      resolve(res.data);
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
+
 export default {
-  name: 'LoginForm'
+  name: 'LoginForm',
+  data () {
+      return {
+          email: '',
+          password: '',
+          submitted: false,
+          valid: true
+      }
+  },
+  methods: {
+      handleLogin() {
+          this.submitted = true;
+          const { email, password } = this;
+          if (email && password) {
+              signIn(email, password)
+              .then(() => {
+                  this.valid = true;
+                  this.$router.push({ name: 'Home' });
+              })
+              .catch(() => {
+                  this.valid = false;
+              });
+          }
+      }
+  }
 }
 </script>
 
@@ -54,5 +111,13 @@ h2 {
 
 .logininput {
     font-size: 30px;
+}
+
+.logininput:-webkit-autofill::first-line {
+    font-size: 30px;
+}
+
+.invalid-feedback {
+    display: block;
 }
 </style>

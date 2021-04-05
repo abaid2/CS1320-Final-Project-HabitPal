@@ -60,7 +60,7 @@ userSchema.methods.comparePassword = function (candidatePassword, callBack) {
 //for generating token when loggedin
 userSchema.methods.generateToken = function (callBack) {
   var user = this;
-  var token = jwt.sign(user._id.toHexString(), process.env.SECRETE);
+  var token = jwt.sign(user._id.toHexString(), config.secret);
   user.token = token;
   user.save(function (err, user) {
     if (err) {

@@ -56,7 +56,6 @@ async function signUp(email, username, password) {
         config
     )
     .then(res => {
-      console.log(res.data);
       resolve(res.data);
     })
     .catch(err => {
@@ -77,12 +76,14 @@ export default {
       }
   },
   methods: {
-      handleRegister(e) {
+      handleRegister() {
           this.submitted = true;
-          console.log('test');
           const { email, username, password, passwordConfirm } = this;
           if (email && username && password && password == passwordConfirm) {
-              signUp(email, username, password);
+              signUp(email, username, password)
+              .then(() => {
+                  this.$router.push({ name: 'Login' });
+              });
           }
       }
   }
@@ -114,6 +115,10 @@ h2 {
 }
 
 .registerinput {
+    font-size: 30px;
+}
+
+.registerinput:-webkit-autofill::first-line {
     font-size: 30px;
 }
 

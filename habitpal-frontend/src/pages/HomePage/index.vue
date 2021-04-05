@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Logout class="logout"/>
     <h1>Habits displayed below</h1>
     <div class="habits">
         <Habit v-for="habit in habits" :habit="habit" :key="habit.id" />
@@ -9,6 +10,7 @@
 
 <script>
 import Habit from '../../components/Habit';
+import Logout from '../../components/Logout';
 import axios from 'axios';
 
 async function getHabits() {
@@ -26,7 +28,6 @@ async function getHabits() {
       }
     })
     .then(res => {
-      console.log(res.data);
       resolve(res.data);
     })
     .catch(err => {
@@ -44,7 +45,8 @@ export default {
     };
   },
   components: {
-    Habit
+    Habit,
+    Logout
   },
   created: async function() {
     getHabits()
@@ -65,5 +67,11 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+
+.logout {
+  position: fixed;
+  left: 50px;
+  top: 50px;
 }
 </style>

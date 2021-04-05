@@ -10,7 +10,7 @@ const dbConfig = require('./app/config/DBConfig');
 mongoose.Promise = global.Promise
 mongoose.connect(dbConfig.url, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 
-const habitHandler = require('./app/controllers/HabitController');
+const { getHabits } = require('./app/controllers/HabitController');
 const { RegisterUser, LoginUser, LogoutUser, getUserDetails } = require('./app/controllers/AuthController');
 const { auth } = require('./app/middleware/auth')
 
@@ -23,10 +23,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({origin:true,credentials: true}));
 
-app.get('/habits', habitHandler.getHabits);
+app.get('/habits', getHabits);
 app.post('/users/register', RegisterUser);
-app.post('users/login', LoginUser);
-app.get('users/auth', auth, getUserDetails);
-app.get('users/logout', auth, LogoutUser)
+app.post('/users/login', LoginUser);
+app.get('/users/auth', auth, getUserDetails);
+app.get('/users/logout', auth, LogoutUser)
 
 app.listen(port, () => console.log(`Server listening on http://localhost:${port}`));
