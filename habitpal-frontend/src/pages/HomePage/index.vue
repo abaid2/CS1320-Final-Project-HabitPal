@@ -5,20 +5,24 @@
     <div class="habits">
         <Habit v-for="habit in habits" :habit="habit" :key="habit.id" />
     </div>
+    <AddButton class="add-habit"/>
   </div>
 </template>
 
 <script>
 import Habit from '../../components/Habit';
 import Logout from '../../components/Logout';
+import AddButton from '../../components/AddButton';
 import axios from 'axios';
+
+axios.defaults.withCredentials = true;
 
 async function getHabits() {
   return new Promise((resolve, reject) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Origin': '*'
       }
     }
 
@@ -46,7 +50,8 @@ export default {
   },
   components: {
     Habit,
-    Logout
+    Logout,
+    AddButton
   },
   created: async function() {
     getHabits()
@@ -73,5 +78,11 @@ h1 {
   position: fixed;
   left: 50px;
   top: 50px;
+}
+
+.add-habit {
+  position: fixed;
+  right: 100px;
+  bottom: 100px;
 }
 </style>

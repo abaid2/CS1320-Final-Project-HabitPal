@@ -5,7 +5,7 @@
             <div class="registeritems">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="text" v-model="email" name="email" class="form-control registerinput" />
+                    <input type="email" v-model="email" name="email" class="form-control registerinput" />
                     <div v-show="submitted && !email" class="invalid-feedback">Email is required</div>
                 </div>
                 <div class="form-group">
