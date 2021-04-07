@@ -2,7 +2,18 @@ const habitsData = require('../data/habits.js');
 const { Habit } = require('../models/HabitModel.js');
 
 exports.getHabits = (req, res) => {
-    res.send(habitsData.habitsTemplate);
+    //res.send(habitsData.habitsTemplate);
+    //console.log(req.user._id);
+    let habits = [];
+    Habit.find({ 'members': req.user._id }, (err, habit_lst) => {
+        for (let i = 0; i < habit_lst.length; i++) {
+            curr = habit_lst[i];
+            habits.push({ id: curr._id, title: curr.title, description: curr.description, 
+            created_at: curr.created_at, members: curr.members });
+        }
+        console.log(habits);
+        res.send(habits);
+    });
 }
 
 exports.addHabit = async (req, res) => {
