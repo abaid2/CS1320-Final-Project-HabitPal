@@ -3,8 +3,6 @@ const { Habit } = require('../models/HabitModel.js');
 const { User } = require('../models/UserModel');
 
 exports.getHabits = (req, res) => {
-    //res.send(habitsData.habitsTemplate);
-    //console.log(req.user._id);
     let habits = [];
     Habit.find({ 'members': req.user._id }, (err, habit_lst) => {
         for (let i = 0; i < habit_lst.length; i++) {
@@ -86,6 +84,18 @@ exports.acceptInvite = async (req, res) => {
         success: true,
         message: 'Successfully Accepted Invitation',
     })
+}
+
+exports.getDetail = async (req, res) => {
+    const habitid = req.query.habitid;
+    let habit = await Habit.findOne({ '_id': habitid });
+    let members = habit.members;
+    let member_lst = [];
+    for (let i = 0; i < members.length; i++) {
+        let user = await User.findOne({ '_id': members[i] });
+        member_lst.push(user.username);
+    }
+    res.send({id: habitid, title: habit.title, description: habit.description, members: member_lst});
 }
 
 
