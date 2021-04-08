@@ -45,6 +45,7 @@ async function createHabit(title, description) {
     )
     .then(res => {
       resolve(res.data);
+      location.reload();
     })
     .catch(err => {
       reject(err);
