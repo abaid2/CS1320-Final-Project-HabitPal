@@ -11,7 +11,6 @@ exports.getHabits = (req, res) => {
             habits.push({ id: curr._id, title: curr.title, description: curr.description, 
             created_at: curr.created_at, members: curr.members });
         }
-        console.log(habits);
         res.send(habits);
     });
 }
