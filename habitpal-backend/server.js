@@ -10,7 +10,7 @@ const dbConfig = require('./app/config/DBConfig');
 mongoose.Promise = global.Promise
 mongoose.connect(dbConfig.url, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 
-const { getHabits, addHabit, inviteFriend, getInvitations, acceptInvite, getDetail } = require('./app/controllers/HabitController');
+const { getHabits, addHabit, inviteFriend, getInvitations, acceptInvite, getHabit } = require('./app/controllers/HabitController');
 const { RegisterUser, LoginUser, LogoutUser, getUserDetails } = require('./app/controllers/AuthController');
 const { auth } = require('./app/middleware/auth')
 
@@ -18,10 +18,10 @@ const app = express();
 const port = 8080;
 
 app.use(express.json());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors({origin:true,credentials: true}));
+app.use(cors({ origin: true, credentials: true }));
 
 app.post('/users/register', RegisterUser);
 app.post('/users/login', LoginUser);
@@ -36,6 +36,6 @@ app.get('/invite', auth, getInvitations);
 
 app.post('/accept', auth, acceptInvite);
 
-app.get('/detail', auth, getDetail);
+app.get('/habit', auth, getHabit);
 
 app.listen(port, () => console.log(`Server listening on http://localhost:${port}`));

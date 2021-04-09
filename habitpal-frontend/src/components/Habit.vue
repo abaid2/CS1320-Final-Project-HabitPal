@@ -14,7 +14,7 @@ export default {
   },
   methods: {
     goToHabit() {
-      this.$router.push({ name: 'Detail', params: { id: this.habit.id } });
+      this.$router.push({ name: 'Habit', params: { id: this.habit.id } });
     }
   }
 }

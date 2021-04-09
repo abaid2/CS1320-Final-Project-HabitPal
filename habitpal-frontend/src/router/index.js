@@ -3,13 +3,12 @@ import Router from 'vue-router';
 import LoginPage from '@/pages/LoginPage';
 import RegisterPage from '@/pages/RegisterPage';
 import HomePage from '@/pages/HomePage';
-import DetailPage from '@/pages/DetailPage';
+import HabitPage from '@/pages/HabitPage';
 
 Vue.use(Router);
 
 export default new Router({
-    routes: [
-        {
+    routes: [{
             path: "/",
             redirect: {
                 name: "Login"
@@ -31,9 +30,9 @@ export default new Router({
             component: HomePage
         },
         {
-            path: '/detail/:id',
-            name: 'Detail',
-            component: DetailPage
+            path: '/habit/:id',
+            name: 'Habit',
+            component: HabitPage
         }
     ]
 });

@@ -52,7 +52,7 @@ async function inviteFriend(username, habitid) {
 }
 
 export default {
-  name: 'DetailPage',
+  name: 'HabitPage',
   data () {
       return {
           username: '',
