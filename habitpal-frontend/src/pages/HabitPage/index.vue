@@ -3,8 +3,10 @@
     <h1> {{ this.habit.title }} </h1>
     <h2> {{ this.habit.description }} </h2>
     <div class="progress-log">
-      <datepicker id="calendar" :inline="true" :highlighted="highlighted"
-       v-on:selected="userLog"></datepicker>
+      <!-- <datepicker id="calendar" :inline="true" :highlighted="highlighted"
+       v-on:selected="userLog"></datepicker> -->
+       <vc-date-picker value 
+        :attributes="attributes" @dayclick="onDayClick"/>
     </div>
     <InviteButton class="invite-habit" />
   </div>
@@ -14,11 +16,12 @@
 
 import InviteButton from '../../components/InviteButton';
 import axios from 'axios';
-import Datepicker from "vuejs-datepicker";
+// import Datepicker from "vuejs-datepicker";
 
-const state = {
-  date: new Date()
-};
+// const state = {
+//   date: new Date()
+// };
+
 
 axios.defaults.withCredentials = true;
 
@@ -82,16 +85,31 @@ export default {
   name: 'HabitPage',
   components: {
     InviteButton,
-    Datepicker
+    // Datepicker
   },
   data: function() {
     return {
       habit: {},
       habitid: this.$route.params.id,
       members: [],
-      state: state,
-      highlighted: {dates: []},
+      days: [],
+      // state: state,
+      // highlighted: {dates: []},
     };
+  },
+  computed: {
+    dates() {
+      return this.days.map(day => day.date);
+    },
+    attributes() {
+      return this.dates.map(date => ({
+        highlight: true,
+        dates: date,
+        popover: {
+          label: 'user',
+        },
+      }));
+    }
   },
   created: async function() {
     let habit = await getHabit(this.habitid);
@@ -100,22 +118,34 @@ export default {
     console.log(habit._id);
   },
   methods: {
-    userLog(date) {
-      date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-      console.log(this.highlighted.dates.length)
-      let alreadyLogged = false;
-      let filtered = {dates: []};
-      for (let currentDate of this.highlighted.dates) {
-        if (currentDate.getTime() === date.getTime()) { 
-          alreadyLogged = true; 
-          this.selected = null;
-          continue;
-        }
-        filtered.dates.push(currentDate);
+    onDayClick(day) {
+      console.log(day);
+      const index = this.days.findIndex(d => d.id === day.id);
+      console.log(index);
+      if (index >= 0) {
+        this.days.splice(index, 1);
+      } else {
+        this.days.push({
+          id: day.id,
+          date: day.date,
+        });
       }
-      if (!alreadyLogged) { filtered.dates.push(date); }
-      this.highlighted = filtered;
-    },
+    }
+    // userLog(date) {
+    //   date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    //   let alreadyLogged = false;
+    //   let filtered = {dates: []};
+    //   for (let currentDate of this.highlighted.dates) {
+    //     if (currentDate.getTime() === date.getTime()) { 
+    //       alreadyLogged = true; 
+    //       this.selected = null;
+    //       continue;
+    //     }
+    //     filtered.dates.push(currentDate);
+    //   }
+    //   if (!alreadyLogged) { filtered.dates.push(date); }
+    //   this.highlighted = filtered;
+    // },
   }
 }
 </script>
