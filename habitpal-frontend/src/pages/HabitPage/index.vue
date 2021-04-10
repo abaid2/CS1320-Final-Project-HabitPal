@@ -3,7 +3,7 @@
     <h1> {{ this.habit.title }} </h1>
     <h2> {{ this.habit.description }} </h2>
     <div class="progress-log">
-       <vc-calendar v-if='username.length > 0' 
+       <vc-calendar id="calendar" v-if='username.length > 0' 
         :attributes="attributes" @dayclick="onDayClick"/>
     </div>
     <InviteButton class="invite-habit" />
@@ -118,26 +118,25 @@ export default {
     // },
     attributes() {
       return this.days.map(day => {
-        if (day.username === this.username) { 
-          return {
-            highlight: true,
-            dates: day.date,
+        let dayAttributes = {
+          dates: day.date,
             popover: {
               label: day.username,
             } 
+        }
+        if (day.username === this.username) { 
+          dayAttributes.highlight = {
+            color: 'red',
+            fillMode: 'solid',
           };
+          dayAttributes.order = 1;
         } else {
-            return {
-              highlight: {
-                color: 'pink',
-                fillMode: 'light',
-              },
-              dates: day.date, 
-              popover: {
-                label: day.username,
-              } 
-            }
-          } 
+            dayAttributes.highlight = {
+              color: 'pink',
+              fillMode: 'outline',
+            };
+          }
+          return dayAttributes; 
       });
     }
   },
@@ -157,7 +156,9 @@ export default {
   methods: {
     onDayClick(day) {
       console.log(day);
-      const index = this.days.findIndex(d => d.id === day.id);
+      const index = this.days.findIndex(d => (d.id === day.id) 
+      && (d.username === this.username));
+      console.log(index);
       if (index >= 0) {
         this.days.splice(index, 1);
         updateLog(this.habitId, day.date, 'delete').then(() => {
@@ -194,6 +195,8 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
+}
+#calendar { 
 }
 .invite-habit {
   position: fixed;
