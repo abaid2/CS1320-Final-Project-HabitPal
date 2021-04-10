@@ -3,7 +3,7 @@
     <Logout class="logout"/>
     <h1>Habits displayed below</h1>
     <div class="habits">
-        <Habit v-for="habit in habits" :habit="habit" :key="habit.id" />
+        <Habit v-for="habit in habits" :habit="habit" :key="habit.id"/>
     </div>
     <h1>Invitations displayed below</h1>
     <div class="invitations">

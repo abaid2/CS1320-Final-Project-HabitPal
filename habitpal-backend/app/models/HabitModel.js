@@ -15,7 +15,7 @@ const habitSchema = mongoose.Schema({
         default: Date.now
     },
     members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
-    // logs: 
+    logs: { type: Map, of: Array },
 });
 
 const Habit = mongoose.model('Habit', habitSchema);

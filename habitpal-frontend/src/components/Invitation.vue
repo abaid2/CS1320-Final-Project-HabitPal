@@ -16,12 +16,12 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
-async function acceptInvitation(habitid) {
+async function acceptInvitation(habitId) {
   //alert(username);
   
   return new Promise((resolve, reject) => {
     const toSend = {
-      habitid: habitid
+      habitId: habitId
     }; 
 
     const config = {
@@ -55,8 +55,8 @@ export default {
   },
   methods: {
       handleAccept() {
-        const habitid = this.invitation.id;
-        acceptInvitation(habitid);
+        const habitId = this.invitation.id;
+        acceptInvitation(habitId);
       }
   }
 }

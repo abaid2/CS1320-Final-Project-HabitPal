@@ -3,9 +3,7 @@
     <h1> {{ this.habit.title }} </h1>
     <h2> {{ this.habit.description }} </h2>
     <div class="progress-log">
-      <!-- <datepicker id="calendar" :inline="true" :highlighted="highlighted"
-       v-on:selected="userLog"></datepicker> -->
-       <vc-date-picker value 
+       <vc-calendar value  :model-config="modelConfig"
         :attributes="attributes" @dayclick="onDayClick"/>
     </div>
     <InviteButton class="invite-habit" />
@@ -16,45 +14,62 @@
 
 import InviteButton from '../../components/InviteButton';
 import axios from 'axios';
-// import Datepicker from "vuejs-datepicker";
-
-// const state = {
-//   date: new Date()
-// };
-
 
 axios.defaults.withCredentials = true;
 
-// async function saveLog(user, date) {
-//   return new Promise((resolve, reject) => {
-//     const toSend = {
-//       user: user,
-//       date: date
-//     }; 
+async function updateLog(habitId, date, action) {
+  return new Promise((resolve, reject) => {
+    const toSend = {
+      habitId: habitId,
+      date: date,
+      action: action
+    }; 
 
-//     const config = {
-//       headers: {
-//         "Content-Type": "application/json",
-//         'Access-Control-Allow-Origin': '*',
-//       }
-//     }
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*',
+      }
+    }
 
-//     axios.post(
-//         'http://localhost:8080/log',
-//         JSON.stringify(toSend),
-//         config
-//     )
-//     .then(res => {
-//       resolve(res.data);
-//     })
-//     .catch(err => {
-//       reject(err);
-//     });
-//   });
-// }
+    axios.post(
+        'http://localhost:8080/log',
+        JSON.stringify(toSend),
+        config
+    )
+    .then(res => {
+      resolve(res.data);
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
 
+async function getUser() {
+    return new Promise((resolve, reject) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
+      }
+    }
 
-async function getHabit(habitid) {
+    axios.get('http://localhost:8080/users/auth', config, {
+      params: {
+        userId: 0
+      }
+    })
+    .then(res => {
+      resolve(res.data);
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
+
+async function getHabit(habitId) {
   return new Promise((resolve, reject) => {
     const config = {
       headers: {
@@ -62,7 +77,7 @@ async function getHabit(habitid) {
         'Access-Control-Allow-Origin': '*'
       }, 
       params: {
-        habitid: habitid
+        habitId: habitId
       }
     }
 
@@ -85,16 +100,18 @@ export default {
   name: 'HabitPage',
   components: {
     InviteButton,
-    // Datepicker
   },
   data: function() {
     return {
+      username: '',
       habit: {},
-      habitid: this.$route.params.id,
+      habitId: this.$route.params.id,
       members: [],
       days: [],
-      // state: state,
-      // highlighted: {dates: []},
+      modelConfig: {
+        type: 'string',
+        mask: 'YYYY-MM-DD',
+      }
     };
   },
   computed: {
@@ -106,46 +123,44 @@ export default {
         highlight: true,
         dates: date,
         popover: {
-          label: 'user',
+          label: this.username,
         },
       }));
     }
   },
   created: async function() {
-    let habit = await getHabit(this.habitid);
+    let habit = await getHabit(this.habitId);
     this.habit = habit;
     this.members = habit.members;
-    console.log(habit._id);
+    let user = await getUser();
+    this.username = user.username;
+    console.log(this.username);
   },
   methods: {
     onDayClick(day) {
       console.log(day);
       const index = this.days.findIndex(d => d.id === day.id);
-      console.log(index);
       if (index >= 0) {
         this.days.splice(index, 1);
+        updateLog(this.habitId, day.id, 'delete').then(() => {
+          console.log('Request to delete log sent successfully');
+        })
+        .catch(err => {
+          console.log(err);
+        })
       } else {
         this.days.push({
           id: day.id,
           date: day.date,
         });
+        updateLog(this.habitId, day.id, 'add').then(() => {
+          console.log('Request to log date sent successfully');
+        })
+        .catch(err => {
+          console.log(err);
+        })
       }
     }
-    // userLog(date) {
-    //   date = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-    //   let alreadyLogged = false;
-    //   let filtered = {dates: []};
-    //   for (let currentDate of this.highlighted.dates) {
-    //     if (currentDate.getTime() === date.getTime()) { 
-    //       alreadyLogged = true; 
-    //       this.selected = null;
-    //       continue;
-    //     }
-    //     filtered.dates.push(currentDate);
-    //   }
-    //   if (!alreadyLogged) { filtered.dates.push(date); }
-    //   this.highlighted = filtered;
-    // },
   }
 }
 </script>

@@ -1,3 +1,4 @@
+const e = require('express');
 const habitsData = require('../data/habits.js');
 const { Habit } = require('../models/HabitModel.js');
 const { User } = require('../models/UserModel');
@@ -39,8 +40,10 @@ exports.getInvitations = async(req, res) => {
 }
 
 exports.addHabit = async(req, res) => {
+    req.body.logs = {};
     const habit = new Habit(req.body);
     habit.members.push(req.user._id);
+    habit.logs.set(req.user.username, []);
     await habit.save((err, doc) => {
         if (err) {
             return res.status(422).json({ errors: err })
@@ -48,7 +51,9 @@ exports.addHabit = async(req, res) => {
             const habitData = {
                 title: doc.title,
                 description: doc.description,
-                created_at: doc.created_at
+                created_at: doc.created_at,
+                members: doc.members,
+                logs: doc.logs,
             }
             req.user.habits.push(doc._id);
             req.user.save();
@@ -63,12 +68,12 @@ exports.addHabit = async(req, res) => {
 
 exports.inviteFriend = async(req, res) => {
     const username = req.body.username;
-    const habitid = req.body.habitid;
+    const habitId = req.body.habitId;
     User.findOne({ 'username': username }, (err, user) => {
         if (err) {
             return res.status(422).json({ errors: err });
         } else if (user) {
-            user.invitations.push(habitid);
+            user.invitations.push(habitId);
             user.save();
             return res.status(200).json({
                 success: true,
@@ -81,14 +86,15 @@ exports.inviteFriend = async(req, res) => {
 }
 
 exports.acceptInvite = async(req, res) => {
-    const habitid = req.body.habitid;
-    const userid = req.user._id;
-    let user = await User.findOne({ '_id': userid });
-    user.invitations.pull(habitid);
-    user.habits.push(habitid);
+    const habitId = req.body.habitId;
+    const userId = req.user._id;
+    let user = await User.findOne({ '_id': userId });
+    user.invitations.pull(habitId);
+    user.habits.push(habitId);
     user.save();
-    let habit = await Habit.findOne({ '_id': habitid });
-    habit.members.push(userid);
+    let habit = await Habit.findOne({ '_id': habitId });
+    habit.members.push(userId);
+    habit.logs.set(req.user.username, []);
     habit.save();
     return res.status(200).json({
         success: true,
@@ -97,13 +103,36 @@ exports.acceptInvite = async(req, res) => {
 }
 
 exports.getHabit = async(req, res) => {
-    const habitid = req.query.habitid;
-    let habit = await Habit.findOne({ '_id': habitid });
+    const habitId = req.query.habitId;
+    let habit = await Habit.findOne({ '_id': habitId });
     let members = habit.members;
     let member_list = [];
     for (let i = 0; i < members.length; i++) {
         let user = await User.findOne({ '_id': members[i] });
         member_list.push(user.username);
     }
-    res.send({ id: habitid, title: habit.title, description: habit.description, members: member_list });
+    res.send({ id: habitId, title: habit.title, description: habit.description, members: member_list });
+}
+
+exports.updateLog = async(req, res) => {
+    const habitId = req.body.habitId;
+    const username = req.user.username;
+    const date = req.body.date;
+    const action = req.body.action;
+    console.log(habitId, username, date, action);
+    let habit = await Habit.findOne({ '_id': habitId });
+    let userLogs = habit.logs.get(username);
+    if (action === 'add') {
+        userLogs.push(date);
+    } else {
+        userLogs.splice(userLogs.indexOf(date), 1);
+    }
+    // userLogs = [];
+    console.log(userLogs);
+    habit.logs.set(username, userLogs);
+    habit.save();
+    return res.status(200).json({
+        success: true,
+        message: 'Successfully Logged Progress',
+    });
 }

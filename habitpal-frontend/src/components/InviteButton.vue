@@ -18,13 +18,13 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
-async function inviteFriend(username, habitid) {
+async function inviteFriend(username, habitId) {
   //alert(username);
   
   return new Promise((resolve, reject) => {
     const toSend = {
       username: username,
-      habitid: habitid
+      habitId: habitId
     }; 
 
     const config = {
@@ -44,7 +44,7 @@ async function inviteFriend(username, habitid) {
       location.reload();
     })
     .catch(err => {
-      alert("invalid username");
+      alert("Invalid username");
       reject(err);
     });
   });
@@ -64,16 +64,16 @@ export default {
       handleInvite() {
           this.submitted = true;
           const { username } = this;
-          let habitid = this.$route.params.id;
+          let habitId = this.$route.params.id;
           if (username) {
-            inviteFriend(username, habitid)
+            inviteFriend(username, habitId)
             .then(() => {
                   this.username = '';
                   this.submitted = false;
                   this.expand = false;
               });
           } else {
-            alert("username cannot be empty");
+            alert("Username cannot be empty");
           }
       }
   }

@@ -1,10 +1,10 @@
 const { User } = require('../models/UserModel');
 
-exports.RegisterUser = async (req, res) => {
+exports.RegisterUser = async(req, res) => {
     const user = new User(req.body);
     await user.save((err, doc) => {
         if (err) {
-            return res.status(422).json({errors:err})
+            return res.status(422).json({ errors: err })
         } else {
             const userData = {
                 username: doc.username,
@@ -34,12 +34,12 @@ exports.LoginUser = (req, res) => {
                             return res.status(400).send({ err });
                         } else {
                             const data = {
-                                userID: user._id,
-                                username: user.username,
-                                email: user.email,
-                                token: user.token
-                            }
-                            //saving token to cookie
+                                    habitId: user._id,
+                                    username: user.username,
+                                    email: user.email,
+                                    token: user.token
+                                }
+                                //saving token to cookie
                             res.cookie('authToken', user.token).status(200).json({
                                 success: true,
                                 message: 'Successfully Logged In!',
@@ -54,15 +54,13 @@ exports.LoginUser = (req, res) => {
 }
 
 exports.LogoutUser = (req, res) => {
-    User.findByIdAndUpdate(
-    { _id: req.user._id }
-    , { token: '' },
-    (err) => {
-        if (err) {
-            return res.json({ success: false, err });
-        }
-        return res.status(200).send({ success: true, message: 'Successfully Logged Out!' });
-    });
+    User.findByIdAndUpdate({ _id: req.user._id }, { token: '' },
+        (err) => {
+            if (err) {
+                return res.json({ success: false, err });
+            }
+            return res.status(200).send({ success: true, message: 'Successfully Logged Out!' });
+        });
 }
 
 //get authenticated user details
