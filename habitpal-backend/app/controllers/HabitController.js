@@ -13,7 +13,8 @@ exports.getHabits = (req, res) => {
                 title: curr.title,
                 description: curr.description,
                 created_at: curr.created_at,
-                members: curr.members
+                members: curr.members,
+                logs: curr.logs,
             });
         }
         res.send(habits);
@@ -33,7 +34,8 @@ exports.getInvitations = async(req, res) => {
             title: habit.title,
             description: habit.description,
             created_at: habit.created_at,
-            members: habit.members
+            members: habit.members,
+            logs: habit.logs
         });
     }
     res.send(habits);
@@ -111,7 +113,7 @@ exports.getHabit = async(req, res) => {
         let user = await User.findOne({ '_id': members[i] });
         member_list.push(user.username);
     }
-    res.send({ id: habitId, title: habit.title, description: habit.description, members: member_list });
+    res.send({ id: habitId, title: habit.title, description: habit.description, members: member_list, logs: habit.logs });
 }
 
 exports.updateLog = async(req, res) => {

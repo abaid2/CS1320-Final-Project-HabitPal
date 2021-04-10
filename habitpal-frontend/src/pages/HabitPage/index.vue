@@ -3,7 +3,7 @@
     <h1> {{ this.habit.title }} </h1>
     <h2> {{ this.habit.description }} </h2>
     <div class="progress-log">
-       <vc-calendar value  :model-config="modelConfig"
+       <vc-calendar v-if='username.length > 0' 
         :attributes="attributes" @dayclick="onDayClick"/>
     </div>
     <InviteButton class="invite-habit" />
@@ -14,6 +14,7 @@
 
 import InviteButton from '../../components/InviteButton';
 import axios from 'axios';
+import dayjs from 'dayjs';
 
 axios.defaults.withCredentials = true;
 
@@ -106,35 +107,52 @@ export default {
       username: '',
       habit: {},
       habitId: this.$route.params.id,
+      logs: new Map(),
       members: [],
       days: [],
-      modelConfig: {
-        type: 'string',
-        mask: 'YYYY-MM-DD',
-      }
     };
   },
   computed: {
-    dates() {
-      return this.days.map(day => day.date);
-    },
+    // dates() {
+    //   return this.days.map(day => day.date);
+    // },
     attributes() {
-      return this.dates.map(date => ({
-        highlight: true,
-        dates: date,
-        popover: {
-          label: this.username,
-        },
-      }));
+      return this.days.map(day => {
+        if (day.username === this.username) { 
+          return {
+            highlight: true,
+            dates: day.date,
+            popover: {
+              label: day.username,
+            } 
+          };
+        } else {
+            return {
+              highlight: {
+                color: 'pink',
+                fillMode: 'light',
+              },
+              dates: day.date, 
+              popover: {
+                label: day.username,
+              } 
+            }
+          } 
+      });
     }
   },
   created: async function() {
     let habit = await getHabit(this.habitId);
     this.habit = habit;
-    this.members = habit.members;
     let user = await getUser();
     this.username = user.username;
-    console.log(this.username);
+    this.members = habit.members;
+    this.logs = habit.logs;
+    for (let thisUsername in this.logs) {
+      let loggedDates = this.logs[thisUsername]; 
+      loggedDates.map(date => this.days.push({
+        id: dayjs(date).format('YYYY-MM-DD'), date: date, username: thisUsername }))
+    }
   },
   methods: {
     onDayClick(day) {
@@ -142,7 +160,7 @@ export default {
       const index = this.days.findIndex(d => d.id === day.id);
       if (index >= 0) {
         this.days.splice(index, 1);
-        updateLog(this.habitId, day.id, 'delete').then(() => {
+        updateLog(this.habitId, day.date, 'delete').then(() => {
           console.log('Request to delete log sent successfully');
         })
         .catch(err => {
@@ -152,8 +170,9 @@ export default {
         this.days.push({
           id: day.id,
           date: day.date,
+          username: this.username
         });
-        updateLog(this.habitId, day.id, 'add').then(() => {
+        updateLog(this.habitId, day.date, 'add').then(() => {
           console.log('Request to log date sent successfully');
         })
         .catch(err => {
