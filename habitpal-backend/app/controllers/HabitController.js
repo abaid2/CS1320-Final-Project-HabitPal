@@ -69,9 +69,9 @@ exports.addHabit = async(req, res) => {
 }
 
 exports.inviteFriend = async(req, res) => {
-    const username = req.body.username;
+    const email = req.body.email;
     const habitId = req.body.habitId;
-    User.findOne({ 'username': username }, (err, user) => {
+    User.findOne({ 'email': email }, (err, user) => {
         if (err) {
             return res.status(422).json({ errors: err });
         } else if (user) {
