@@ -10,7 +10,7 @@ const dbConfig = require('./app/config/DBConfig');
 mongoose.Promise = global.Promise
 mongoose.connect(dbConfig.url, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 
-const { getHabits, addHabit, inviteFriend, getInvitations, acceptInvite, getHabit, updateLog } = require('./app/controllers/HabitController');
+const { getHabits, addHabit, inviteFriend, getInvitations, acceptInvite, getFriends, getHabit, updateLog } = require('./app/controllers/HabitController');
 const { RegisterUser, LoginUser, LogoutUser, getUserDetails } = require('./app/controllers/AuthController');
 const { auth } = require('./app/middleware/auth')
 
@@ -33,6 +33,8 @@ app.post('/habits', auth, addHabit);
 
 app.post('/invite', auth, inviteFriend);
 app.get('/invite', auth, getInvitations);
+
+app.get('/friends', auth, getFriends);
 
 app.post('/accept', auth, acceptInvite);
 

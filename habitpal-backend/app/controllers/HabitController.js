@@ -135,3 +135,33 @@ exports.updateLog = async(req, res) => {
         message: 'Successfully Logged Progress',
     });
 }
+
+exports.addFriend = async(req, res) => {
+    userId = req.user._id;
+    let user = await User.findById(userId);
+    let friend = await User.findOne({'email': req.body.email});
+    friendId = friend._id;
+    user.friends.push(friendId);
+    friend.friends.push(userId);
+    user.save();
+    friend.save();
+    return res.status(200).json({
+        success: true,
+        message: 'Successfully Added Friend',
+    })
+}
+
+exports.getFriends = async(req, res) => {
+    let friends = [];
+    User.find({ 'friends': req.user._id }, (err, friendsList) => {
+        for (let i = 0; i < friendsList.length; i++) {
+            curr = friendsList[i];
+            friends.push({
+                id: curr._id,
+                username: curr.username,
+                email: curr.email,
+            });
+        }
+        res.send(friends);
+    });
+}

@@ -42,7 +42,8 @@ export default {
 <style scoped>
 .habit {
   margin-top: 10px;
-  width: 800px;
+  width: 50%;
+  max-width: 1000px;
   border: 1px solid black;
   padding: 0px;
   background-color: white;
@@ -63,15 +64,16 @@ button:hover {
 }
 
 .expand-container {
-  flex: 1;
+  flex: 2;
   display: flex;
-  justify-content: center;
+  justify-content: left;
 }
 
 .expand-btn {
   background-color: transparent;
   border: none;
   padding: 0px;
+  margin-left: 25px;
 }
 
 .expand-btn:hover {
@@ -89,7 +91,10 @@ button:hover {
 }
 
 .title {
-  flex: 5;
+  flex: 7;
+  text-align: left;
+  font-size: 36px;
+  font-weight: bold;
 }
 
 .check-container {
