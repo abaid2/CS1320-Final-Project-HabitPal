@@ -24,6 +24,7 @@ const userSchema = mongoose.Schema({
     token: {
         type: String
     },
+    friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     habits: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Habit' }],
     invitations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Habit' }]
 });

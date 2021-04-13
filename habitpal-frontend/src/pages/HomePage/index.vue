@@ -2,11 +2,12 @@
   <div>
     <Logout class="logout"/>
     <InvitationViewer class="invitation-viewer"/>
+    <FriendsViewer class="friends-viewer"/>
     <h1>Habits displayed below</h1>
     <div class="habits">
         <Habit v-for="habit in habits" :habit="habit" :key="habit.id"/>
+        <AddButton class="add-habit"/>
     </div>
-    <AddButton class="add-habit"/>
   </div>
 </template>
 
@@ -15,6 +16,7 @@ import Habit from '../../components/Habit';
 import Logout from '../../components/Logout';
 import AddButton from '../../components/AddButton';
 import InvitationViewer from '../../components/InvitationViewer';
+import FriendsViewer from '../../components/FriendsViewer';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
@@ -54,7 +56,8 @@ export default {
     Habit,
     Logout,
     AddButton,
-    InvitationViewer
+    InvitationViewer,
+    FriendsViewer
   },
   created: async function() {
     let habits = await getHabits();
@@ -74,18 +77,13 @@ h1 {
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: 60px;
 }
 
 .logout {
   position: fixed;
   left: 50px;
   top: 50px;
-}
-
-.add-habit {
-  position: fixed;
-  right: 100px;
-  bottom: 100px;
 }
 
 .row {
@@ -97,8 +95,14 @@ h1 {
 
 .invitation-viewer {
   position: fixed;
-  right: 50px;
+  right: 100px;
   top: 50px;
+}
+
+.friends-viewer {
+  position: fixed;
+  right: 220px;
+  top: 42px;
 }
 
 </style>
