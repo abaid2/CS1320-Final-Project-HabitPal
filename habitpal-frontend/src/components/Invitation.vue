@@ -1,12 +1,7 @@
 <template>
   <div class="invitation">
-    <div class="content">
-      <h3> {{invitation.title}} </h3>
-      <p> {{invitation.description}} </p>
-    </div>
-    <form @submit.prevent="handleAccept">
-      <button class="btn btn-primary">Accept</button>
-    </form>
+    <h3> {{invitation.title}} </h3>
+    <button class="btn btn-primary accept-btn" @click="handleAccept">Accept</button>
   </div>
 </template>
 
@@ -65,10 +60,16 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .invitation {
-  margin: 50px;
-  width: 800px;
+  width: 400px;
+  height: 80px;
+  display: flex;
+  background-color: #f8f8f8;
+  align-items: center;
+  padding: 15px;
 }
-.content {
-  margin: 50px;
+
+.accept-btn {
+  position: absolute;
+  right: 0;
 }
 </style>

@@ -5,6 +5,8 @@
 <script>
 import axios from 'axios';
 
+axios.defaults.withCredentials = true;
+
 async function logout() {
   return new Promise((resolve, reject) => {
     const config = {

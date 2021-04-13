@@ -79,7 +79,7 @@ export default {
       handleRegister() {
           this.submitted = true;
           const { email, username, password, passwordConfirm } = this;
-          if (email && username && password && password == passwordConfirm) {
+          if (email && username && password && password === passwordConfirm) {
               signUp(email, username, password)
               .then(() => {
                   this.$router.push({ name: 'Login' });
