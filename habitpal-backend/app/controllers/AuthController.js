@@ -67,7 +67,17 @@ exports.LogoutUser = (req, res) => {
 exports.getUserDetails = (req, res) => {
     return res.status(200).json({
         isAuthenticated: true,
+        id: req.user._id,
         username: req.user.username,
         email: req.user.email,
     });
 }
+
+// exports.getUserById = async(req, res) => {
+//     let user = await User.findById({ _id: req.body.userId })
+//     const userData = {
+//         username: user.username,
+//         email: user.email,
+//     }
+//     return res.status(200).send(userData);
+// }

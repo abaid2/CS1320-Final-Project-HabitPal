@@ -45,7 +45,7 @@ exports.addHabit = async(req, res) => {
     req.body.logs = {};
     const habit = new Habit(req.body);
     habit.members.push(req.user._id);
-    habit.logs.set(req.user.username, []);
+    habit.logs.set(req.user._id, []);
     await habit.save((err, doc) => {
         if (err) {
             return res.status(422).json({ errors: err })
@@ -96,7 +96,7 @@ exports.acceptInvite = async(req, res) => {
     user.save();
     let habit = await Habit.findOne({ '_id': habitId });
     habit.members.push(userId);
-    habit.logs.set(req.user.username, []);
+    habit.logs.set(userId, []);
     habit.save();
     return res.status(200).json({
         success: true,
@@ -107,23 +107,20 @@ exports.acceptInvite = async(req, res) => {
 exports.getHabit = async(req, res) => {
     const habitId = req.query.habitId;
     let habit = await Habit.findOne({ '_id': habitId });
-    let members = habit.members;
-    let member_list = [];
-    for (let i = 0; i < members.length; i++) {
-        let user = await User.findOne({ '_id': members[i] });
-        member_list.push(user.username);
-    }
-    res.send({ id: habitId, title: habit.title, description: habit.description, members: member_list, logs: habit.logs });
+    let members = new Map();
+    let users = await User.find({ '_id': { $in: habit.members } });
+    users.map(user => members[user._id] = { username: user.username, email: user.email });
+    res.send({ id: habitId, title: habit.title, description: habit.description, members: members, logs: habit.logs });
 }
 
 exports.updateLog = async(req, res) => {
     const habitId = req.body.habitId;
-    const username = req.user.username;
+    const userId = req.user._id;
     const date = req.body.date;
     const action = req.body.action;
-    console.log(habitId, username, date, action);
+    console.log(habitId, userId, date, action);
     let habit = await Habit.findOne({ '_id': habitId });
-    let userLogs = habit.logs.get(username);
+    let userLogs = habit.logs.get(userId);
     if (action === 'add') {
         userLogs.push(date);
     } else {
@@ -131,7 +128,7 @@ exports.updateLog = async(req, res) => {
     }
     // userLogs = [];
     console.log(userLogs);
-    habit.logs.set(username, userLogs);
+    habit.logs.set(userId, userLogs);
     habit.save();
     return res.status(200).json({
         success: true,

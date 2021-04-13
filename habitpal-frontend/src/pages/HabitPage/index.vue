@@ -3,7 +3,7 @@
     <h1> {{ this.habit.title }} </h1>
     <h2> {{ this.habit.description }} </h2>
     <div class="progress-log">
-       <vc-calendar id="calendar" v-if='username.length > 0' 
+       <vc-calendar id="calendar" v-if='userId.length > 0' :max-date='new Date()'
         :attributes="attributes" @dayclick="onDayClick"/>
     </div>
     <InviteButton class="invite-habit" />
@@ -104,27 +104,24 @@ export default {
   },
   data: function() {
     return {
-      username: '',
+      userId: '',
       habit: {},
       habitId: this.$route.params.id,
+      members: new Map(),
       logs: new Map(),
-      members: [],
       days: [],
     };
   },
   computed: {
-    // dates() {
-    //   return this.days.map(day => day.date);
-    // },
     attributes() {
       return this.days.map(day => {
         let dayAttributes = {
           dates: day.date,
-            popover: {
-              label: day.username,
-            } 
+          popover: {
+            label: this.members[day.userId].username,
+          },
         }
-        if (day.username === this.username) { 
+        if (day.userId === this.userId) { 
           dayAttributes.highlight = {
             color: 'red',
             fillMode: 'solid',
@@ -144,20 +141,22 @@ export default {
     let habit = await getHabit(this.habitId);
     this.habit = habit;
     let user = await getUser();
-    this.username = user.username;
+    this.userId= user.id;
+    console.log(this.userId);
     this.members = habit.members;
     this.logs = habit.logs;
-    for (let thisUsername in this.logs) {
-      let loggedDates = this.logs[thisUsername]; 
+    for (let thisUserId in this.logs) {
+      let loggedDates = this.logs[thisUserId]; 
       loggedDates.map(date => this.days.push({
-        id: dayjs(date).format('YYYY-MM-DD'), date: date, username: thisUsername }))
+        id: dayjs(date).format('YYYY-MM-DD'), date: date, userId: thisUserId }))
     }
   },
   methods: {
     onDayClick(day) {
       console.log(day);
+      if (day.date > new Date()) { return; }
       const index = this.days.findIndex(d => (d.id === day.id) 
-      && (d.username === this.username));
+      && (d.userId === this.userId));
       console.log(index);
       if (index >= 0) {
         this.days.splice(index, 1);
@@ -171,7 +170,7 @@ export default {
         this.days.push({
           id: day.id,
           date: day.date,
-          username: this.username
+          userId: this.userId
         });
         updateLog(this.habitId, day.date, 'add').then(() => {
           console.log('Request to log date sent successfully');
