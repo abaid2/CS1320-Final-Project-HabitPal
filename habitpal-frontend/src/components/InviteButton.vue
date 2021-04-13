@@ -2,7 +2,7 @@
   <div>
       <form @submit.prevent="handleInvite" v-show="expand">
         <div class="form-group">
-          <input name="username" v-model="username" class="form-control username-input" placeholder="username" />
+          <input name="email" v-model="email" class="form-control email-input" placeholder="user email" />
         </div>
         <div class="form-group">
           <button class="btn btn-primary user-invite">Invite</button>
@@ -18,12 +18,12 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
-async function inviteFriend(username, habitId) {
+async function inviteFriend(email, habitId) {
   //alert(username);
   
   return new Promise((resolve, reject) => {
     const toSend = {
-      username: username,
+      email: email,
       habitId: habitId
     }; 
 
@@ -44,7 +44,7 @@ async function inviteFriend(username, habitId) {
       location.reload();
     })
     .catch(err => {
-      alert("Invalid username");
+      alert("Invalid email");
       reject(err);
     });
   });
@@ -55,7 +55,7 @@ export default {
   name: 'HabitPage',
   data () {
       return {
-          username: '',
+          email: '',
           submitted: false,
           expand: false,
       }
@@ -63,17 +63,17 @@ export default {
   methods: {
       handleInvite() {
           this.submitted = true;
-          const { username } = this;
+          const { email } = this;
           let habitId = this.$route.params.id;
-          if (username) {
-            inviteFriend(username, habitId)
+          if (email) {
+            inviteFriend(email, habitId)
             .then(() => {
-                  this.username = '';
+                  this.email = '';
                   this.submitted = false;
                   this.expand = false;
               });
           } else {
-            alert("Username cannot be empty");
+            alert("Email cannot be empty");
           }
       }
   }
