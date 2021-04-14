@@ -22,29 +22,45 @@ body {
 body {
     background-image: url("assets/wallpaper.jpg");
     background-size: cover;
+    background-repeat: space;
 }
-
 @font-face {
   font-family: MerriweatherSans Variable;
   src: url('./assets/MerriweatherSans-VariableFont_wght.ttf');
 }
 
+@font-face {
+  font-family: DancingScript Variable;
+  src: url('./assets/DancingScript-VariableFont_wght.ttf');
+}
 #app {
   font-family: MerriweatherSans Variable;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 
+h1 {
+    font-family: DancingScript Variable;
+    color: floralwhite;
+    margin-top: 100px;
+    font-size: max(4vw, 40px);
+    font-variation-settings: 'wght' 700;
+}
+
+input, textarea {
+  color: #1c1e21;
+  font-variation-settings: 'wght' 100;
+}
 ::placeholder {
     font-size: 1.25vw;
     color: rgb(144 148 169);
     font-variation-settings: 'wght' 100;
 }
 
-input:focus::placeholder {
+input:focus::placeholder, textarea:focus::placeholder {
     color: rgb(190 195 206);
 }
+
 </style>

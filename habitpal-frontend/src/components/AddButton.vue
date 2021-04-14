@@ -1,23 +1,21 @@
 <template>
   <div class="add-habit">
-      <div class="expand-div" @click="expand=!expand" v-show="!expand">
-        <h2>New habit</h2>
-      </div>
+      <button class="btn btn-success expand-div" @click="expand=!expand" v-show="!expand">
+        New habit
+      </button>
       <div class="close-container">
-          <button class="btn close-btn" v-show="expand" @click="expand=false">x</button>
+          <button class="btn close-btn" v-show="expand" @click="expand=false"><i class="fas fa-times"></i></button>
       </div>
       <form @submit.prevent="handleCreate" v-show="expand" autocomplete="off">
             <div>
-                <div>
-                    <label for="title">Title</label>
-                    <input type="text" v-model="title" name="email" class="form-control" />
+                <div class="form-input">
+                    <input type="text" placeholder="Title" v-model="title" name="email" class="form-control" />
                 </div>
-                <div>
-                    <label for="description">Description</label>
-                    <textarea v-model="description" name="password" class="form-control" />
+                <div class="form-input">
+                    <textarea placeholder="Description" v-model="description" name="password" class="form-control" />
                 </div>    
                 <div>
-                    <button class="btn btn-primary create-btn">Create Habit</button>
+                    <button class="btn btn-success create-btn">Create Habit</button>
                 </div>
             </div>
       </form>
@@ -86,14 +84,15 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 form {
-  background-color: teal;
+  background-color: white;
   padding: 20px;
+  border-radius: 8px;
+  
 }
 
 label {
   font-size: 30px;
-  font-weight: bold;
-  color: white;
+  font-weight: bold;;
   float: left;
 }
 
@@ -116,7 +115,6 @@ textarea {
   max-width: 1000px;
   height: 60px;
   margin-top: 10px;
-  background-color: teal;
 }
 
 .expand-div {
@@ -129,22 +127,25 @@ textarea {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: teal;
 }
 
-.expand-div:hover {
-  background-color: rgb(0, 104, 104);
-}
 
 .close-btn {
-  color: white;
+  color: #214278;
   font-size: 30px;
   background-color: transparent;
-  padding: 0px;
+  padding: 5px;
 }
 
 .close-container {
   float: right;
-  padding-right: 50px;
+  padding-right: 10px;
+}
+
+.form-input {
+  padding: 20px;
+}
+.btn {
+  width: 100%;
 }
 </style>

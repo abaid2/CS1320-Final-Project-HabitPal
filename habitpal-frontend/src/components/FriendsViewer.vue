@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button class="friends-btn"  @click="expanded=!expanded"><img class="freinds-img" src="../../resources/icons8-user-group-2-64.png"></button>
+        <button class="friends-btn"  @click="expanded=!expanded"><i class="fas fa-user-friends fa-2x friends-img"></i></button>
         <div v-show="expanded" class="friends">
             <Friend class="friend" v-for="friend in friends" :friend="friend" :key="friend.id" />
         </div>    
@@ -59,18 +59,18 @@ export default {
   font-size: 20px;
 }
 
-.freinds-btn:focus {
+.friends-btn:focus {
   outline: none;
   box-shadow: none;
 }
 
 .friends-img {
-    height: 50px;
-    width: 50px;
+    color: floralwhite;
 }
 
 .friends-img:hover {
     cursor: pointer;
+    color: #dae5ff;
 }
 
 .friends {

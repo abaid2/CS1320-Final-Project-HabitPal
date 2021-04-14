@@ -18,14 +18,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+h1 {
+  font-size: max(7vw, 60px);
+  padding-bottom: 40px;
+}
 #login-container {
   color: floralwhite;
 }
-h1 {
-    margin-top: 100px;
-    font-size: 60px;
-    font-variation-settings: 'wght' 700;
-}
+
 
 </style>

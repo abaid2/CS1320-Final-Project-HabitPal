@@ -1,9 +1,13 @@
 <template>
   <div>
+    <div id="home-header">
     <Logout class="logout"/>
-    <InvitationViewer class="invitation-viewer"/>
-    <FriendsViewer class="friends-viewer"/>
-    <h1>Habits displayed below</h1>
+    <h1>HabitPal</h1>
+    <div id="icons">
+      <InvitationViewer class="invitation-viewer icon"/>
+      <FriendsViewer class="friends-viewer icon"/>
+    </div>
+    </div>
     <div class="habits">
         <Habit v-for="habit in habits" :habit="habit" :key="habit.id"/>
         <AddButton class="add-habit"/>
@@ -68,9 +72,13 @@ export default {
 
 <!-- "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+body {
+  background-image: url('../../assets/logo.png') !important;
+}
 h1 {
-    margin-top: 100px;
+    margin-top: 0px;
     font-size: 60px;
+    font-variation-settings: 'wght' 800;
 }
 
 .habits {
@@ -80,29 +88,22 @@ h1 {
   margin-top: 60px;
 }
 
-.logout {
-  position: fixed;
-  left: 50px;
-  top: 50px;
-}
-
-.row {
+#home-header {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  padding: 0 50px 0 50px;
+  background-color: #214278;
 }
 
-.invitation-viewer {
-  position: fixed;
-  right: 100px;
-  top: 50px;
+#icons {
+  display: flex;
+  flex-direction: row;
 }
 
-.friends-viewer {
-  position: fixed;
-  right: 220px;
-  top: 42px;
+.icon {
+  padding: 20px;
 }
 
 </style>

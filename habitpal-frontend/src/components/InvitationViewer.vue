@@ -1,6 +1,6 @@
 <template>
     <div>
-        <button class="invitation-btn"  @click="expanded=!expanded"><img class="bell-img" src="../../resources/icons8-bell-24.png"><span v-show="invitations.length" class="badge badge-primary badge-invite">{{invitations.length}}</span></button>
+        <button class="invitation-btn"  @click="expanded=!expanded"><i class="fas fa-bell fa-2x bell-img"></i><span v-show="invitations.length" class="badge badge-primary badge-invite">{{invitations.length}}</span></button>
         <div v-show="expanded" class="invitations">
             <Invitation class="invite" v-for="invitation in invitations" :invitation="invitation" :key="invitation.id" />
         </div>    
@@ -65,12 +65,14 @@ export default {
 }
 
 .bell-img {
+    color: floralwhite;
     height: 50px;
     width: 50px;
 }
 
 .bell-img:hover {
     cursor: pointer;
+    color: #dae5ff;
 }
 
 .invitations {

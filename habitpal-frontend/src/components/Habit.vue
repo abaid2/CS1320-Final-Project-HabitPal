@@ -44,7 +44,7 @@ export default {
   margin-top: 10px;
   width: 50%;
   max-width: 1000px;
-  border: 1px solid black;
+  color: #214278;
   padding: 0px;
   background-color: white;
 }
@@ -58,7 +58,7 @@ button:hover {
 }
 
 .title-container {
-  height: 60px;
+  height: 100px;
   display: flex;
   align-items: center;
 }

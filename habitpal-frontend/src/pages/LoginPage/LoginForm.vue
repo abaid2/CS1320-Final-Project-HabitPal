@@ -11,11 +11,11 @@
                     <div v-show="submitted && !password" class="invalid-feedback">Password is required</div>
                     <div v-show="email && password && !valid" class="invalid-feedback">Invalid login</div>
                 </div>
-                <div class="form-group">
+                <div class="form-group login">
                     <button class="btn btn-primary logininput">Login</button>
                 </div>
                 <div class="form-group register">
-                    <router-link to="/register" class="link-primary logininput">Sign up</router-link>
+                    <router-link to="/register" class="link-primary logininput"><button class="btn btn-success">Create New Account</button></router-link>
                 </div>
             </div>
         </form>
@@ -83,15 +83,10 @@ export default {
 </script>
 
 <style scoped>
-h2 {
-    font-size: 40px;
-}
+
 .loginbody {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    width: 32vw;
+    margin: auto;
     border-radius: 8px;
     overflow: hidden;
     border: none;
@@ -108,8 +103,14 @@ h2 {
     padding:25px;
 }
 
+.login {
+    padding-bottom: 30px;
+    border-bottom: 1px solid #dadde1;
+}
 .logininput {
     font-size: 1.5vw;
+    width: 100%;
+    margin-bottom: 1px solid black;;
 }
 
 .logininput:-webkit-autofill::first-line {
@@ -124,5 +125,8 @@ h2 {
     text-decoration: none;
 }
 
+.register {
+    padding-top: 10px;
+}
 
 </style>
