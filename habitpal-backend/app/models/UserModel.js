@@ -25,6 +25,7 @@ const userSchema = mongoose.Schema({
         type: String
     },
     friends: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+    requests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     habits: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Habit' }],
     invitations: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Habit' }]
 });
