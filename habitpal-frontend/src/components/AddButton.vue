@@ -1,21 +1,26 @@
 <template>
-  <div>
-      <form @submit.prevent="handleCreate" v-show="expand">
+  <div class="add-habit">
+      <div class="expand-div" @click="expand=!expand" v-show="!expand">
+        <h2>New habit</h2>
+      </div>
+      <div class="close-container">
+          <button class="btn close-btn" v-show="expand" @click="expand=false">x</button>
+      </div>
+      <form @submit.prevent="handleCreate" v-show="expand" autocomplete="off">
             <div>
-                <div class="form-group">
+                <div>
                     <label for="title">Title</label>
                     <input type="text" v-model="title" name="email" class="form-control" />
                 </div>
-                <div class="form-group">
+                <div>
                     <label for="description">Description</label>
-                    <input type="text" v-model="description" name="password" class="form-control" />
+                    <textarea v-model="description" name="password" class="form-control" />
                 </div>    
-                <div class="form-group">
-                    <button class="btn btn-primary">Create Habit</button>
+                <div>
+                    <button class="btn btn-primary create-btn">Create Habit</button>
                 </div>
             </div>
       </form>
-      <button class="add btn btn-primary" @click="expand=!expand">+</button>
   </div>
 </template>
 
@@ -80,10 +85,66 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.add {
-  border-radius: 100%;
-  width: 70px;
-  height: 70px;
-  font-size: 40px;
+form {
+  background-color: teal;
+  padding: 20px;
+}
+
+label {
+  font-size: 30px;
+  font-weight: bold;
+  color: white;
+  float: left;
+}
+
+textarea {
+  resize: none;
+}
+
+.form-control {
+  font-size: 26px;
+}
+
+.create-btn {
+  width: 100%;
+  font-size: 26px;
+  margin-top: 3px;
+}
+
+.add-habit {
+  width: 50%;
+  max-width: 1000px;
+  height: 60px;
+  margin-top: 10px;
+  background-color: teal;
+}
+
+.expand-div {
+  height: 80px;
+  border: 1px solid black;
+  padding: 0px;
+  cursor: pointer;
+  color: white;
+  font-size: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: teal;
+}
+
+.expand-div:hover {
+  background-color: rgb(0, 104, 104);
+}
+
+.close-btn {
+  color: white;
+  font-size: 30px;
+  background-color: transparent;
+  padding: 0px;
+}
+
+.close-container {
+  float: right;
+  padding-right: 50px;
 }
 </style>

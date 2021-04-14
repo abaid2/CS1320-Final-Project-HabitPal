@@ -135,3 +135,62 @@ exports.updateLog = async(req, res) => {
         message: 'Successfully Logged Progress',
     });
 }
+
+exports.addFriend = async(req, res) => {
+    userId = req.user._id;
+    let user = await User.findById(userId);
+    let friend = await User.findById(req.body.id);
+    console.log(friend.friends);
+    friendId = req.body.id;
+    user.friends.push(friendId);
+    const index = user.requests.indexOf(friendId);
+    if (index > -1) {
+        user.requests.splice(index, 1);
+    }
+    friend.friends.push(userId);
+    user.save();
+    friend.save();
+    return res.status(200).json({
+        success: true,
+        message: 'Successfully Added Friend',
+    })
+}
+
+exports.getFriends = async(req, res) => {
+    let friends = req.user.friends;
+    let friendsList = [];
+    for (let i = 0; i < friends.length; i++) {
+        other = await User.findById(friends[i]);
+        friendsList.push({
+            id: other._id,
+            username: other.username,
+            email: other.email,
+        });
+    }
+    res.send(friendsList);
+}
+
+exports.getFriendRequests = async(req, res) => {
+    let requests = req.user.requests;
+    let requestList = [];
+    for (let i = 0; i < requests.length; i++) {
+        other = await User.findById(requests[i]);
+        requestList.push({
+            id: other._id,
+            username: other.username,
+            email: other.email,
+        });
+    }
+    res.send(requestList);
+}
+
+exports.sendFriendRequest = async(req, res) => {
+    userId = req.user._id;
+    let other = await User.findOne({'email': req.body.email});
+    other.requests.push(userId);
+    other.save();
+    return res.status(200).json({
+        success: true,
+        message: 'Successfully Sent Friend Request',
+    })
+}
