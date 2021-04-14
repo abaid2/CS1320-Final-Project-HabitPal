@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <h1>Welcome to HabitPal!</h1>
+  <div id="login-container">
+    <h1>HabitPal</h1>
     <LoginForm />
   </div>
 </template>
@@ -18,9 +18,14 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+#login-container {
+  color: floralwhite;
+}
 h1 {
     margin-top: 100px;
     font-size: 60px;
+    font-variation-settings: 'wght' 700;
 }
 
 </style>
