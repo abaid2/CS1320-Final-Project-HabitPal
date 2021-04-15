@@ -1,6 +1,9 @@
 <template>
     <div class="wrapper">
-        <button class="friends-btn"  @click="expanded=!expanded"><i class="fas fa-user-friends fa-2x friends-img" /><span v-show="requests.length" class="badge badge-primary badge-requests">{{requests.length}}</span></button>
+        <button class="friends-btn"  @click="expanded=!expanded">
+            <i class="fas fa-user-friends fa-2x friends-img" />
+            <span v-show="requests.length" class="badge badge-danger badge-requests">{{requests.length}}</span>
+        </button>
         <div v-show="expanded" class="friends">
             <h3>Friends: {{friends.length}}</h3>
             <div class="friends-list">
@@ -128,8 +131,7 @@ h3 {
   border: none;
   padding: 0px;
   font-size: 20px;
-  width: 50px;
-  align-self: center;
+  display: flex;
 }
 
 .friends-btn:focus {
@@ -168,9 +170,10 @@ h3 {
 }
 
 .badge-requests {
-    position: absolute;
-    right: 0px;
-    top: 0px;
+    height: 20px;
+    width: 17.5px;
+    font-size: 12px;
+    text-align: center;
 }
 
 .add-friend {
