@@ -66,7 +66,6 @@ export default {
 <style scoped>
 .friend {
   width: 400px;
-  height: 80px;
   display: flex;
   flex-direction: column;
   background-color: #f8f8f8;
