@@ -28,25 +28,6 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
-async function getFriends() {
-  return new Promise((resolve, reject) => {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*'
-      }
-    }
-
-    axios.get('http://localhost:8080/friends', config)
-    .then(res => {
-      resolve(res.data);
-    })
-    .catch(err => {
-      reject(err);
-    });
-  });
-}
-
 async function getFriendRequests() {
   return new Promise((resolve, reject) => {
     const config = {
@@ -95,9 +76,11 @@ async function sendFriendRequest(email) {
 
 export default {
   name: 'FriendsViewer',
+  props: {
+    friends: Array
+  },
   data () {
       return {
-          friends: [],
           requests: [],
           expanded: false,
           expandAdd: false,
@@ -121,8 +104,6 @@ export default {
       }
   },
   created: async function() {
-    let friends = await getFriends();
-    this.friends = friends;
     let requests = await getFriendRequests();
     this.requests = requests;
   }

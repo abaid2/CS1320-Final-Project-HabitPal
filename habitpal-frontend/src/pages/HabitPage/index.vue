@@ -6,7 +6,7 @@
        <vc-calendar id="calendar" v-if='userId.length > 0' :max-date='new Date()'
         :attributes="attributes" @dayclick="onDayClick"/>
     </div>
-    <InviteButton class="invite-habit" />
+    <InviteButton class="invite-habit" :friends="friends" :members="members"/>
   </div>
 </template>
 
@@ -38,6 +38,25 @@ async function updateLog(habitId, date, action) {
         JSON.stringify(toSend),
         config
     )
+    .then(res => {
+      resolve(res.data);
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
+
+async function getFriends() {
+  return new Promise((resolve, reject) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
+      }
+    }
+
+    axios.get('http://localhost:8080/friends', config)
     .then(res => {
       resolve(res.data);
     })
@@ -110,6 +129,7 @@ export default {
       members: new Map(),
       logs: new Map(),
       days: [],
+      friends: []
     };
   },
   computed: {
@@ -142,7 +162,8 @@ export default {
     this.habit = habit;
     let user = await getUser();
     this.userId= user.id;
-    console.log(this.userId);
+    let friends = await getFriends();
+    this.friends = friends;
     this.members = habit.members;
     this.logs = habit.logs;
     for (let thisUserId in this.logs) {
@@ -150,6 +171,7 @@ export default {
       loggedDates.map(date => this.days.push({
         id: dayjs(date).format('YYYY-MM-DD'), date: date, userId: thisUserId }))
     }
+    console.log(this.members[this.userId]);
   },
   methods: {
     onDayClick(day) {

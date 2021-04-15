@@ -3,7 +3,7 @@
     <div id="home-header">
     <Logout class="logout"/>
     <InvitationViewer class="invitation-viewer icon"/>
-    <FriendsViewer class="friends-viewer icon"/>
+    <FriendsViewer :friends="friends" class="friends-viewer icon"/>
     <h1>HabitPal</h1>
     </div>
     <div class="habits">
@@ -22,6 +22,25 @@ import FriendsViewer from '../../components/FriendsViewer';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
+
+async function getFriends() {
+  return new Promise((resolve, reject) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
+      }
+    }
+
+    axios.get('http://localhost:8080/friends', config)
+    .then(res => {
+      resolve(res.data);
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
 
 async function getHabits() {
   return new Promise((resolve, reject) => {
@@ -52,6 +71,7 @@ export default {
     return {
       habits: [],
       invitations: [],
+      friends: []
     };
   },
   components: {
@@ -64,6 +84,8 @@ export default {
   created: async function() {
     let habits = await getHabits();
     this.habits = habits;
+    let friends = await getFriends();
+    this.friends = friends;
   }
 }
 </script>
