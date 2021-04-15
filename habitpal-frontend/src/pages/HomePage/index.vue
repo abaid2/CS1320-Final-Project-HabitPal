@@ -7,7 +7,7 @@
     <h1>HabitPal</h1>
     </div>
     <div class="habits">
-        <Habit v-for="habit in habits" :habit="habit" :key="habit.id"/>
+        <Habit v-for="habit in sortedHabits" :habit="habit" :key="habit.id" @complete="handleComplete(habit, $event)"/>
         <AddButton class="add-habit"/>
     </div>
   </div>
@@ -71,7 +71,8 @@ export default {
     return {
       habits: [],
       invitations: [],
-      friends: []
+      friends: [],
+      completedHabits: []
     };
   },
   components: {
@@ -80,6 +81,32 @@ export default {
     AddButton,
     InvitationViewer,
     FriendsViewer
+  },
+  computed: {
+    // sortedHabits: function() {
+    //   const sorted = this.habits.sort((a,b) => {
+    //     if (this.completedHabits.includes(a) && this.completedHabits.includes(b)) {
+    //       return 0;
+    //     } else if (this.completedHabits.includes(a)) {
+    //       return 1;
+    //     } else if (this.completedHabits.includes(b)) {
+    //       return -1
+    //     }
+    //   })
+    //   return sorted;
+    // }
+  },
+  methods: {
+    handleComplete(habit, value) {
+      if (value && !this.completedHabits.includes(habit)) {
+        this.habits.push(habit);
+      } else if (!value && this.completedHabits.includes(habit)) {
+        const index = this.completedHabits.indexOf(habit);
+        if (index > -1) {
+          this.completedHabits.splice(index, 1);
+        }
+      }
+    }
   },
   created: async function() {
     let habits = await getHabits();
