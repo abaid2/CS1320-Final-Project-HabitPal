@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header class="header" :title="`HabitPal`" />
+    <Header class="header" :title="`HabitPal`" :friends="friends"/>
     <div class="habits">
         <Habit v-for="habit in habits" :habit="habit" :key="habit.id"/>
         <AddButton class="add-habit"/>

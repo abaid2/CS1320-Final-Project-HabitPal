@@ -15,35 +15,6 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
-async function updateLog(habitId, date, action) {
-  return new Promise((resolve, reject) => {
-    const toSend = {
-      habitId: habitId,
-      date: date,
-      action: action
-    }; 
-
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*',
-      }
-    }
-
-    axios.post(
-        'http://localhost:8080/log',
-        JSON.stringify(toSend),
-        config
-    )
-    .then(res => {
-      resolve(res.data);
-    })
-    .catch(err => {
-      reject(err);
-    });
-  });
-}
-
 async function getFriends() {
   return new Promise((resolve, reject) => {
     const config = {
@@ -106,8 +77,6 @@ export default {
       friends: []
     };
   },
-    }
-  }, 
   created: async function() {
     let habit = await getHabit(this.habitId);
     this.habit = habit;

@@ -5,7 +5,7 @@
         <h1>{{title}}</h1>
         <div id="icons">
           <NotificationViewer class="invitation-viewer icon"/>
-          <FriendsViewer class="friends-viewer icon"/>
+          <FriendsViewer :friends="friends" class="friends-viewer icon"/>
         </div>
       </div>
     </div>
@@ -20,6 +20,7 @@ export default {
   name: 'Header',
   props: {
       title: String,
+      friends: Array
   },
   components: {
     Logout,
