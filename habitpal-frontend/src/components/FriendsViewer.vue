@@ -5,27 +5,26 @@
             <span v-show="requests.length" class="badge badge-danger badge-requests">{{requests.length}}</span>
         </button>
         <div v-show="expanded" class="friends">
-            <h3>Friends: {{friends.length}}</h3>
-            <div class="friends-list">
+            <!-- <div class="friends-list">
               <Friend class="friend" v-for="friend in friends" :friend="friend" :key="friend.id" />
             </div>
             <h3 v-show="requests.length">Requests: {{requests.length}}</h3>
-            <div class="friends-list">
+            <div class="friends-list"> -->
               <FriendRequest class="friend" v-for="request in requests" :request="request" :key="request.id"/>
-            </div>
+            <!-- </div>
             <div class="add-friend">
                 <button class="btn btn-primary" v-show="!expandAdd" @click="expandAdd=!expandAdd">Add friend</button>
                 <div v-show="expandAdd">
                   <input type="email" v-model="friendEmail" placeholder="email" />
                   <button class="btn btn-primary" @click="handleRequestFriend">Add friend</button>
                 </div>  
-              </div>  
+              </div>   -->
         </div>    
     </div>
 </template>
 
 <script>
-import Friend from './Friend';
+// import Friend from './Friend';
 import FriendRequest from './FriendRequest';
 import axios from 'axios';
 
@@ -91,7 +90,7 @@ export default {
       }
   },
   components: {
-      Friend,
+      // Friend,
       FriendRequest
   },
   methods: {
@@ -157,8 +156,15 @@ h3 {
 .friends {
     display: flex;
     flex-direction: column;
-    padding-top: 10px;
+    background-color: white;
+    opacity: 0.95;
+    position: fixed;
+    right: 3px;
+    top: 85px;
+    border-radius: 8px;
+    padding: 2px;
 }
+
 
 .friend {
     margin-bottom: 5px;

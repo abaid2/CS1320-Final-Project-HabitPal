@@ -1,9 +1,9 @@
 <template>
-  <div class="friend" v-show="visible">
+  <div class="friend">
     <h3> {{request.username}} </h3>
     <div class="buttons">
-        <button class="btn btn-success" @click="handleAccept">accept</button>
-        <button class="btn btn-danger">reject</button>
+        <button class="btn btn-primary accept-btn" @click="handleAccept">Accept</button>
+        <button class="btn btn-light delete-btn">Delete</button>
     </div>    
   </div>
 </template>
@@ -45,7 +45,7 @@ export default {
   name: 'FriendRequest',
   data () {
       return {
-          visible: true
+        
       }
   },
   props: {
@@ -53,10 +53,7 @@ export default {
   },
   methods: {
       handleAccept() {
-        addFriend(this.request.id)
-        .then(() => {
-            this.visible = false;
-        });
+        addFriend(this.request.id);
       }
   },
 }
@@ -65,15 +62,24 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .friend {
-  width: 400px;
+  width: 24vw;
   display: flex;
   flex-direction: column;
-  background-color: #f8f8f8;
-  align-items: center;
+  justify-content: space-between;
+  align-items: baseline;
+  /* background-color: red; */
+  border-bottom: 1px solid #dadde1;
   padding: 15px;
 }
 
-.buttons {
-    display: flex;
+.btn {
+  width: 80px;
+  font-size: 1vw;
+}
+.accept-btn {
+}
+
+.delete-btn {
+  border: 1px solid #dadde1;
 }
 </style>
