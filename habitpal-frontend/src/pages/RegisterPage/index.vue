@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div id="register-container">
+    <h1>Sign Up</h1>
     <RegisterForm />
   </div>
 </template>
@@ -17,4 +18,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+#register-container {
+  color: floralwhite;
+}
 </style>

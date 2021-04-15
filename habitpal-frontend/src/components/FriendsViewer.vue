@@ -157,8 +157,7 @@ h3 {
 }
 
 .friends-img {
-    height: 50px;
-    width: 50px;
+    color: floralwhite;
 }
 
 .friends-list {
@@ -169,6 +168,7 @@ h3 {
 
 .friends-img:hover {
     cursor: pointer;
+    color: #dae5ff;
 }
 
 .friends {

@@ -1,5 +1,5 @@
 <template>
-  <button class="btn btn-primary btn-lg" @click="handleLogout">Logout</button>
+  <button class="btn btn-danger btn-lg" @click="handleLogout">Logout</button>
 </template>
 
 <script>
@@ -42,5 +42,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.btn {
+  font-size: 20px;
+}
 </style>
