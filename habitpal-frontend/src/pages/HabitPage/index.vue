@@ -2,7 +2,7 @@
   <div>
     <Header class="header" :title="habit.title"/>
     <Details v-if="habitFetched" class="calendar" :habitId="habitId" :habit="habit"/>
-    <InviteButton class="invite-habit" />
+    <InviteButton class="invite-habit" :friends="friends" :members="members"/>
   </div>
 </template>
 
@@ -14,6 +14,54 @@ import Details from '../../components/Details';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
+
+async function updateLog(habitId, date, action) {
+  return new Promise((resolve, reject) => {
+    const toSend = {
+      habitId: habitId,
+      date: date,
+      action: action
+    }; 
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*',
+      }
+    }
+
+    axios.post(
+        'http://localhost:8080/log',
+        JSON.stringify(toSend),
+        config
+    )
+    .then(res => {
+      resolve(res.data);
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
+
+async function getFriends() {
+  return new Promise((resolve, reject) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
+      }
+    }
+
+    axios.get('http://localhost:8080/friends', config)
+    .then(res => {
+      resolve(res.data);
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
 
 async function getHabit(habitId) {
   return new Promise((resolve, reject) => {
@@ -54,12 +102,19 @@ export default {
       habit: {},
       habitId: this.$route.params.id,
       habitFetched: false,
+      members: {},
+      friends: []
+    };
+  },
     }
   }, 
   created: async function() {
     let habit = await getHabit(this.habitId);
     this.habit = habit;
     this.habitFetched = true;
+    let friends = await getFriends();
+    this.friends = friends;
+    this.members = habit.members;
   }
 }
 </script>

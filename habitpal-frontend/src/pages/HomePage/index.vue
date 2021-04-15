@@ -16,6 +16,25 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
+async function getFriends() {
+  return new Promise((resolve, reject) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
+      }
+    }
+
+    axios.get('http://localhost:8080/friends', config)
+    .then(res => {
+      resolve(res.data);
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
+
 async function getHabits() {
   return new Promise((resolve, reject) => {
     const config = {
@@ -45,6 +64,7 @@ export default {
     return {
       habits: [],
       invitations: [],
+      friends: []
     };
   },
   components: {
@@ -55,6 +75,8 @@ export default {
   created: async function() {
     let habits = await getHabits();
     this.habits = habits;
+    let friends = await getFriends();
+    this.friends = friends;
   }
 }
 </script>
@@ -67,6 +89,7 @@ export default {
   flex-direction: column;
   align-items: center;
   margin-top: 100px;
+
 }
 
 </style>

@@ -4,9 +4,9 @@
       <div class="expand-container">
         <button class="expand-btn"  @click="handleExpand($event)" @mouseenter="hoverChild=true" @mouseout="hoverChild=false"><img class="expand-img" src="../../resources/icons8-expand-arrow-52.png"></button>
       </div>  
-      <h2 class="title"> {{habit.title}} </h2>
+      <h2 class="title" v-bind:class="{completetitle: completed}"> {{habit.title}} </h2>
       <div class="check-container" >
-        <input class="complete-check checkbox-circle" type="checkbox" value="" @click="$event.stopPropagation()" @mouseenter="hoverChild=true" @mouseout="hoverChild=false">
+        <input v-model="completed" class="complete-check checkbox-circle" type="checkbox" value="" @click="$event.stopPropagation()" @change="handleComplete($event)" @mouseenter="hoverChild=true" @mouseout="hoverChild=false">
       </div>  
     </div>  
     <p v-show="expanded"> {{ habit.description }} </p>
@@ -14,13 +14,69 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
+
+async function updateLog(habitId, date, action) {
+  return new Promise((resolve, reject) => {
+    const toSend = {
+      habitId: habitId,
+      date: date,
+      action: action
+    }; 
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*',
+      }
+    }
+
+    axios.post(
+        'http://localhost:8080/log',
+        JSON.stringify(toSend),
+        config
+    )
+    .then(res => {
+      resolve(res.data);
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
+
+async function getUser() {
+    return new Promise((resolve, reject) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*'
+      }
+    }
+
+    axios.get('http://localhost:8080/users/auth', config, {
+      params: {
+        userId: 0
+      }
+    })
+    .then(res => {
+      resolve(res.data);
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
 
 export default {
   name: 'Habit',
   data () {
       return {
           expanded: false,
-          hoverChild: false
+          hoverChild: false,
+          completed: false
       }
   },
   props: {
@@ -33,7 +89,24 @@ export default {
     handleExpand(e) {
       e.stopPropagation();
       this.expanded=!this.expanded;
+    },
+    async handleComplete(e) {
+      const today = new Date();
+      const date = today.toISOString().slice(0,11) + '04:00:00.000Z';
+      if (e.target.checked) {
+        await updateLog(this.habit.id, date, 'add');
+        this.$emit('complete');
+      } else {
+        await updateLog(this.habit.id, date, 'delete');
+        this.$emit('undocomplete');
+      }
     }
+  },
+  created: async function() {
+    const today = new Date();
+    const date = today.toISOString().slice(0,11) + '04:00:00.000Z';
+    const user = await getUser();
+    this.completed = this.$props.habit.logs[user.id].includes(date);
   }
 }
 </script>
@@ -95,6 +168,10 @@ button:hover {
   text-align: left;
   font-size: 36px;
   font-weight: bold;
+}
+
+.completetitle {
+  color: slategrey;
 }
 
 .check-container {

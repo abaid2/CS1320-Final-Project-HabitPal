@@ -1,8 +1,13 @@
 <template>
   <div>
-      <form @submit.prevent="handleInvite" v-show="expand">
-        <div class="form-group">
-          <input name="email" v-model="email" class="form-control email-input" placeholder="user email" />
+      <form @submit.prevent="handleInvite" :style="{visibility: expand ? 'visible' : 'hidden'}">
+        <div class="friends-list">
+          <div class="friend" v-for="friend in filteredFriends" :key="friend.id">
+            <div class="check-container" >
+              <input class="check" type="checkbox" value="" @change="addToList($event, friend.id)">
+            </div>
+            <h3>{{friend.username}}</h3>
+          </div>  
         </div>
         <div class="form-group">
           <button class="btn btn-primary user-invite">Invite</button>
@@ -18,12 +23,11 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
-async function inviteFriend(email, habitId) {
-  //alert(username);
+async function inviteFriend(id, habitId) {
   
   return new Promise((resolve, reject) => {
     const toSend = {
-      email: email,
+      id: id,
       habitId: habitId
     }; 
 
@@ -41,10 +45,8 @@ async function inviteFriend(email, habitId) {
     )
     .then(res => {
       resolve(res.data);
-      location.reload();
     })
     .catch(err => {
-      alert("Invalid email");
       reject(err);
     });
   });
@@ -53,35 +55,67 @@ async function inviteFriend(email, habitId) {
 
 export default {
   name: 'HabitPage',
+  props: {
+    friends: Array,
+    members: Object
+  },
   data () {
       return {
-          email: '',
-          submitted: false,
           expand: false,
+          toInvite: []
       }
   },
   methods: {
-      handleInvite() {
-          this.submitted = true;
-          const { email } = this;
+      async handleInvite() {
           let habitId = this.$route.params.id;
-          if (email) {
-            inviteFriend(email, habitId)
-            .then(() => {
-                  this.email = '';
-                  this.submitted = false;
-                  this.expand = false;
-              });
-          } else {
-            alert("Email cannot be empty");
+          for (let i=0; i<this.toInvite.length; i++) {
+            console.log(this.toInvite[i]);
+            await inviteFriend(this.toInvite[i], habitId);
           }
+          this.expand = false;
+      },
+      addToList(e, id) {
+        if (e.target.checked) {
+          this.toInvite.push(id);
+        }
       }
+  },
+  computed: {
+    filteredFriends: function() {
+      const filteredFriends = this.friends.filter(friend => !this.members[friend.id]);
+      return filteredFriends;
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+h3 {
+  color: white;
+}
+
+.friends-list {
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.friend {
+  display: flex;
+  align-content: center;
+}
+
+.check-container {
+  display: flex;
+}
+
+.check {
+  align-self: center;
+  width: 26px;
+  height: 26px;
+  margin-right: 15px;
+}
+
 .add {
   border-radius: 100%;
   width: 70px;

@@ -69,18 +69,20 @@ exports.addHabit = async(req, res) => {
 }
 
 exports.inviteFriend = async(req, res) => {
-    const email = req.body.email;
+    const id = req.body.id;
     const habitId = req.body.habitId;
-    User.findOne({ 'email': email }, (err, user) => {
+    User.findOne({ '_id': id }, (err, user) => {
         if (err) {
             return res.status(422).json({ errors: err });
         } else if (user) {
-            user.invitations.push(habitId);
-            user.save();
-            return res.status(200).json({
-                success: true,
-                message: 'Successfully Invited Friend',
-            })
+            if (!user.invitations.includes(habitId)) {
+                user.invitations.push(habitId);
+                user.save();
+                return res.status(200).json({
+                    success: true,
+                    message: 'Successfully Invited Friend',
+                })
+            }
         } else {
             return res.status(422).json({ errors: err });
         }
@@ -190,9 +192,11 @@ exports.getFriendRequests = async(req, res) => {
 
 exports.sendFriendRequest = async(req, res) => {
     userId = req.user._id;
-    let other = await User.findOne({ 'email': req.body.email });
-    other.requests.push(userId);
-    other.save();
+    let other = await User.findOne({'email': req.body.email});
+    if (!other.requests.includes(userId)) {
+        other.requests.push(userId);
+        other.save();
+    }
     return res.status(200).json({
         success: true,
         message: 'Successfully Sent Friend Request',
