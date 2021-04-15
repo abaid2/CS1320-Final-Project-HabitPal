@@ -95,10 +95,10 @@ export default {
       const date = today.toISOString().slice(0,11) + '04:00:00.000Z';
       if (e.target.checked) {
         await updateLog(this.habit.id, date, 'add');
-        this.$emit('complete');
+        this.$emit('complete', true);
       } else {
         await updateLog(this.habit.id, date, 'delete');
-        this.$emit('undocomplete');
+        this.$emit('complete', false);
       }
     }
   },
@@ -107,6 +107,7 @@ export default {
     const date = today.toISOString().slice(0,11) + '04:00:00.000Z';
     const user = await getUser();
     this.completed = this.$props.habit.logs[user.id].includes(date);
+    this.$emit('complete', this.completed);
   }
 }
 </script>
