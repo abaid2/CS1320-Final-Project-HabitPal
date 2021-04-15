@@ -18,10 +18,11 @@ export default {
 <style scoped>
 .friend {
   width: 400px;
-  height: 80px;
+  height: 40px;
   display: flex;
-  background-color: #f8f8f8;
+  background-color: transparent;
   align-items: center;
+  justify-content: center;
   padding: 15px;
 }
 </style>

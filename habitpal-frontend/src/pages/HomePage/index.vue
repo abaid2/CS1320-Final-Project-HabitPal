@@ -2,11 +2,9 @@
   <div>
     <div id="home-header">
     <Logout class="logout"/>
+    <InvitationViewer class="invitation-viewer icon"/>
+    <FriendsViewer class="friends-viewer icon"/>
     <h1>HabitPal</h1>
-    <div id="icons">
-      <InvitationViewer class="invitation-viewer icon"/>
-      <FriendsViewer class="friends-viewer icon"/>
-    </div>
     </div>
     <div class="habits">
         <Habit v-for="habit in habits" :habit="habit" :key="habit.id"/>
@@ -97,13 +95,10 @@ h1 {
   background-color: #214278;
 }
 
-#icons {
-  display: flex;
-  flex-direction: row;
-}
-
-.icon {
-  padding: 20px;
+.friends-viewer {
+  position: fixed;
+  right: 350px;
+  top: 42px;
 }
 
 </style>
