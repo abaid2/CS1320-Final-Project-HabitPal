@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <button class="friends-btn"  @click="expanded=!expanded"><img class="freinds-img" src="../../resources/icons8-user-group-2-64.png"><span v-show="requests.length" class="badge badge-primary badge-requests">{{requests.length}}</span></button>
+        <button class="friends-btn"  @click="expanded=!expanded"><i class="fas fa-user-friends fa-2x friends-img" /><span v-show="requests.length" class="badge badge-primary badge-requests">{{requests.length}}</span></button>
         <div v-show="expanded" class="friends">
             <h3>Friends: {{friends.length}}</h3>
             <div class="friends-list">
