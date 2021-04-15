@@ -52,7 +52,6 @@ export default {
          }
     },
     created: function() {
-        console.log(Object.values(this.members).length);
         this.chartData = {labels: [], datasets: [{
             backgroundColor: ['rgb(255, 205, 86)', 'rgb(255, 99, 132)', 'rgb(54, 162, 235)'],
             hoverBackgroundColor: ['rgb(247, 174, 2)', 'rgb(199, 44, 98)', 'rgb(15, 122, 245)'],
@@ -76,7 +75,6 @@ export default {
             this.chartData.labels.push(this.members[record[0]].username);
             this.chartData.datasets[0].data.push(record[1].length); 
             });
-            console.log(this.chartData);
         }
     }
 }

@@ -4,7 +4,7 @@
         <Logout class="logout"/>
         <h1>{{title}}</h1>
         <div id="icons">
-          <NotificationViewer class="invitation-viewer icon"/>
+          <NotificationViewer class="notification-viewer icon"/>
           <FriendsViewer class="friends-viewer icon"/>
         </div>
       </div>

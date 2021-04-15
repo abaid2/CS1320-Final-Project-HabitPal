@@ -4,7 +4,7 @@
       <div id="calendar-container content">
         <vc-calendar id="calendar" v-if='userId.length > 0' :max-date='new Date()'
         :attributes="attributes" @dayclick="onDayClick"/>
-        <h2 v-if="!leaderboard">Add friends to this habit to track and compare progress.</h2>
+        <h2 v-if="Object.values(this.members).length < 2">Add friends to this habit to track and compare progress.</h2>
       </div>
       <Leaderboard v-if="leaderboard" class="leaderboard content" :logs="logs" :members="members" />
     </div>
@@ -85,12 +85,12 @@ export default {
             days: [],
             members: new Map(),
             logs: new Map(),
-            leaderboard: false
+            leaderboard: false,
         };
     },
     computed: {
         attributes() {
-        return this.days.map(day => {
+          let map = this.days.map(day => {
             let dayAttributes = {
             dates: day.date,
             popover: {
@@ -110,14 +110,12 @@ export default {
                 };
             }
             return dayAttributes; 
-        });
+          });
+          return map;
         }
     },
     created: async function() {
         this.members = this.habit.members;
-        if (Object.values(this.members).length > 1) { 
-          this.leaderboard = true;
-        }
         this.logs = this.habit.logs;
         let user = await getUser();
         this.userId= user.id;
@@ -126,10 +124,12 @@ export default {
         loggedDates.map(date => this.days.push({
             id: dayjs(date).format('YYYY-MM-DD'), date: date, userId: thisUserId }))
         }
+        this.leaderboard = true;
     },
     methods: {
         onDayClick(day) {
         console.log(day);
+        // let userLogs = this.logs[this.userId];
         if (day.date > new Date()) { return; }
         const index = this.days.findIndex(d => (d.id === day.id) 
         && (d.userId === this.userId));
@@ -143,6 +143,7 @@ export default {
             console.log(err);
             })
         } else {
+            // this.logs[this.userId] = userLogs.push(day.date);
             this.days.push({
             id: day.id,
             date: day.date,
