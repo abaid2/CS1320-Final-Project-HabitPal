@@ -89,20 +89,24 @@ exports.inviteFriend = async(req, res) => {
     });
 }
 
-exports.acceptInvite = async(req, res) => {
+exports.handleInviteResponse = async(req, res) => {
     const habitId = req.body.habitId;
     const userId = req.user._id;
+    const response = req.body.response;
     let user = await User.findOne({ '_id': userId });
+    console.log(user);
     user.invitations.pull(habitId);
-    user.habits.push(habitId);
+    if (response === 'accept') {
+        user.habits.push(habitId);
+        let habit = await Habit.findOne({ '_id': habitId });
+        habit.members.push(userId);
+        habit.logs.set(userId, []);
+        habit.save();
+    };
     user.save();
-    let habit = await Habit.findOne({ '_id': habitId });
-    habit.members.push(userId);
-    habit.logs.set(userId, []);
-    habit.save();
     return res.status(200).json({
         success: true,
-        message: 'Successfully Accepted Invitation',
+        message: 'Successfully Handled Invitation',
     })
 }
 

@@ -110,7 +110,7 @@ export default {
 .logininput {
     font-size: 1.5vw;
     width: 100%;
-    margin-bottom: 1px solid black;;
+    margin-bottom: 1px solid black;
 }
 
 .logininput:-webkit-autofill::first-line {

@@ -1,11 +1,6 @@
 <template>
   <div>
-    <div id="home-header">
-    <Logout class="logout"/>
-    <InvitationViewer class="invitation-viewer icon"/>
-    <FriendsViewer :friends="friends" class="friends-viewer icon"/>
-    <h1>HabitPal</h1>
-    </div>
+    <Header class="header" :title="`HabitPal`" />
     <div class="habits">
         <Habit v-for="habit in habits" :habit="habit" :key="habit.id"/>
         <AddButton class="add-habit"/>
@@ -15,10 +10,8 @@
 
 <script>
 import Habit from '../../components/Habit';
-import Logout from '../../components/Logout';
+import Header from '../../components/Header';
 import AddButton from '../../components/AddButton';
-import InvitationViewer from '../../components/InvitationViewer';
-import FriendsViewer from '../../components/FriendsViewer';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
@@ -76,10 +69,8 @@ export default {
   },
   components: {
     Habit,
-    Logout,
+    Header,
     AddButton,
-    InvitationViewer,
-    FriendsViewer
   },
   created: async function() {
     let habits = await getHabits();
@@ -92,35 +83,13 @@ export default {
 
 <!-- "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-body {
-  background-image: url('../../assets/logo.png') !important;
-}
-h1 {
-    margin-top: 0px;
-    font-size: 60px;
-    font-variation-settings: 'wght' 800;
-}
 
 .habits {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 60px;
-}
+  margin-top: 100px;
 
-#home-header {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 50px 0 50px;
-  background-color: #214278;
-}
-
-.friends-viewer {
-  position: fixed;
-  right: 350px;
-  top: 42px;
 }
 
 </style>

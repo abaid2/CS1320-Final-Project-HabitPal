@@ -7,11 +7,11 @@
           <button class="btn close-btn" v-show="expand" @click="expand=false"><i class="fas fa-times"></i></button>
       </div>
       <form @submit.prevent="handleCreate" v-show="expand" autocomplete="off">
-            <div>
-                <div class="form-input">
+            <div id="form-content">
+                <div class="form-input text">
                     <input type="text" placeholder="Title" v-model="title" name="email" class="form-control" />
                 </div>
-                <div class="form-input">
+                <div class="form-input description">
                     <textarea placeholder="Description" v-model="description" name="password" class="form-control" />
                 </div>    
                 <div>
@@ -83,11 +83,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+#form-content {
+  padding: 40px;
+}
 form {
   background-color: white;
-  padding: 20px;
   border-radius: 8px;
-  
 }
 
 label {
@@ -106,7 +108,7 @@ textarea {
 
 .create-btn {
   width: 100%;
-  font-size: 26px;
+  font-size: 1.75vw;
   margin-top: 3px;
 }
 
@@ -118,6 +120,7 @@ textarea {
 }
 
 .expand-div {
+  font-size: 1.75vw;
   height: 80px;
   border: 1px solid black;
   padding: 0px;
@@ -143,7 +146,11 @@ textarea {
 }
 
 .form-input {
-  padding: 20px;
+  padding-top: 20px;
+}
+
+.description {
+  padding-bottom: 20px;
 }
 .btn {
   width: 100%;
