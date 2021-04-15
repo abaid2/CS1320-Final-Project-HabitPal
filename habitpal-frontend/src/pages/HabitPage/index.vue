@@ -126,7 +126,7 @@ export default {
       userId: '',
       habit: {},
       habitId: this.$route.params.id,
-      members: new Map(),
+      members: {},
       logs: new Map(),
       days: [],
       friends: []
