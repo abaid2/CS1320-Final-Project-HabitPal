@@ -1,22 +1,22 @@
 <template>
-  <div class="invitation">
-    <h3> {{invitation.title}} </h3>
-    <button class="btn btn-primary accept-btn" @click="handleAccept">Accept</button>
+  <div class="friend" v-show="visible">
+    <h3> {{request.username}} </h3>
+    <div class="buttons">
+        <button class="btn btn-success" @click="handleAccept">accept</button>
+        <button class="btn btn-danger">reject</button>
+    </div>    
   </div>
 </template>
 
 <script>
-
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
-async function acceptInvitation(habitId) {
-  //alert(username);
-  
+async function addFriend(id) {
   return new Promise((resolve, reject) => {
     const toSend = {
-      habitId: habitId
+      id: id,
     }; 
 
     const config = {
@@ -27,7 +27,7 @@ async function acceptInvitation(habitId) {
     }
 
     axios.post(
-        'http://localhost:8080/accept',
+        'http://localhost:8080/friends',
         JSON.stringify(toSend),
         config
     )
@@ -36,39 +36,45 @@ async function acceptInvitation(habitId) {
       location.reload();
     })
     .catch(err => {
-      alert("accept invitation failed");
       reject(err);
     });
   });
-  
 }
 
 export default {
-  name: 'Invitation',
+  name: 'FriendRequest',
+  data () {
+      return {
+          visible: true
+      }
+  },
   props: {
-      invitation: Object
+      request: Object
   },
   methods: {
       handleAccept() {
-        const habitId = this.invitation.id;
-        acceptInvitation(habitId);
+        addFriend(this.request.id)
+        .then(() => {
+            this.visible = false;
+        });
       }
-  }
+  },
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.invitation {
+.friend {
   width: 400px;
+  height: 80px;
   display: flex;
+  flex-direction: column;
   background-color: #f8f8f8;
   align-items: center;
   padding: 15px;
 }
 
-.accept-btn {
-  position: absolute;
-  right: 0;
+.buttons {
+    display: flex;
 }
 </style>

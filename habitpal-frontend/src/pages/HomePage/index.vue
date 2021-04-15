@@ -101,7 +101,7 @@ h1 {
 
 .friends-viewer {
   position: fixed;
-  right: 220px;
+  right: 350px;
   top: 42px;
 }
 
