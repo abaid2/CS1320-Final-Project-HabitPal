@@ -1,6 +1,9 @@
 <template>
     <div>
-        <button class="invitation-btn"  @click="expanded=!expanded"><i class="fas fa-bell fa-2x bell-img"></i><span v-show="invitations.length" class="badge badge-primary badge-invite">{{invitations.length}}</span></button>
+        <button class="notification-btn" @click="viewNotifications()">
+          <i class="fas fa-bell fa-2x" v-bind:class="[expanded ? 'active' : 'inactive']"></i>
+          <span v-show="invitations.length" class="badge badge-danger badge-invite">{{invitations.length}}</span>
+        </button>
         <div v-show="expanded" class="invitations">
             <Invitation class="invite" v-for="invitation in invitations" :invitation="invitation" :key="invitation.id" />
         </div>    
@@ -33,7 +36,7 @@ async function getInvitations() {
 }
 
 export default {
-  name: 'InvitationViewer',
+  name: 'NotificationViewer',
   data () {
       return {
           invitations: [],
@@ -46,50 +49,63 @@ export default {
   created: async function() {
     let invitations = await getInvitations();
     this.invitations = invitations;
+  },
+  methods: {
+    viewNotifications() {
+      if (this.invitations.length) { this.expanded = !this.expanded; }
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.invitation-btn {
+.notification-btn {
   background-color: transparent;
   border: none;
   padding: 0px;
   font-size: 20px;
+  display: flex;
 }
 
-.invitation-btn:focus {
+.notification-btn:focus {
   outline: none;
   box-shadow: none;
 }
 
-.bell-img {
+.inactive {
     color: floralwhite;
-    height: 50px;
-    width: 50px;
 }
 
-.bell-img:hover {
+.inactive:hover {
     cursor: pointer;
     color: #dae5ff;
+}
+
+.active {
+  color: #2e89ff;
 }
 
 .invitations {
     display: flex;
     flex-direction: column;
+    background-color: white;
+    opacity: 0.95;
     position: fixed;
-    right: 5px;
-    padding-top: 10px;
+    right: 3px;
+    top: 85px;
+    border-radius: 8px;
+    padding: 2px;
 }
 
-.invite {
+/* .invite {
     margin-bottom: 5px;
-}
+} */
 
 .badge-invite {
-    position: absolute;
-    right: 0px;
-    top: 0px;
+  height: 20px;
+  width: 17.5px;
+  font-size: 12px;
+  text-align: center;
 }
 </style>

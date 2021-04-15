@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <router-view />
+    <div id="wallpaper"></div>
   </div>
 </template>
 
@@ -20,9 +21,7 @@ body {
 }
 
 body {
-    background-image: url("assets/wallpaper.jpg");
-    background-size: cover;
-    background-repeat: space;
+    background-color: #1a2c50;
 }
 @font-face {
   font-family: MerriweatherSans Variable;
@@ -44,7 +43,6 @@ body {
 h1 {
     font-family: DancingScript Variable;
     color: floralwhite;
-    margin-top: 100px;
     font-size: max(4vw, 40px);
     font-variation-settings: 'wght' 700;
 }

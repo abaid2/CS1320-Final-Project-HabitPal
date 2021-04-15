@@ -1,11 +1,7 @@
 <template>
   <div>
-    <h1> {{ this.habit.title }} </h1>
-    <h2> {{ this.habit.description }} </h2>
-    <div class="progress-log">
-       <vc-calendar id="calendar" v-if='userId.length > 0' :max-date='new Date()'
-        :attributes="attributes" @dayclick="onDayClick"/>
-    </div>
+    <Header class="header" :title="habit.title"/>
+    <Details v-if="habitFetched" class="calendar" :habitId="habitId" :habit="habit"/>
     <InviteButton class="invite-habit" />
   </div>
 </template>
@@ -13,62 +9,11 @@
 <script>
 
 import InviteButton from '../../components/InviteButton';
+import Header from '../../components/Header';
+import Details from '../../components/Details';
 import axios from 'axios';
-import dayjs from 'dayjs';
 
 axios.defaults.withCredentials = true;
-
-async function updateLog(habitId, date, action) {
-  return new Promise((resolve, reject) => {
-    const toSend = {
-      habitId: habitId,
-      date: date,
-      action: action
-    }; 
-
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*',
-      }
-    }
-
-    axios.post(
-        'http://localhost:8080/log',
-        JSON.stringify(toSend),
-        config
-    )
-    .then(res => {
-      resolve(res.data);
-    })
-    .catch(err => {
-      reject(err);
-    });
-  });
-}
-
-async function getUser() {
-    return new Promise((resolve, reject) => {
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*'
-      }
-    }
-
-    axios.get('http://localhost:8080/users/auth', config, {
-      params: {
-        userId: 0
-      }
-    })
-    .then(res => {
-      resolve(res.data);
-    })
-    .catch(err => {
-      reject(err);
-    });
-  });
-}
 
 async function getHabit(habitId) {
   return new Promise((resolve, reject) => {
@@ -100,103 +45,28 @@ async function getHabit(habitId) {
 export default {
   name: 'HabitPage',
   components: {
+    Header,
+    Details,
     InviteButton,
   },
   data: function() {
     return {
-      userId: '',
       habit: {},
       habitId: this.$route.params.id,
-      members: new Map(),
-      logs: new Map(),
-      days: [],
-    };
-  },
-  computed: {
-    attributes() {
-      return this.days.map(day => {
-        let dayAttributes = {
-          dates: day.date,
-          popover: {
-            label: this.members[day.userId].username,
-          },
-        }
-        if (day.userId === this.userId) { 
-          dayAttributes.highlight = {
-            color: 'red',
-            fillMode: 'solid',
-          };
-          dayAttributes.order = 1;
-        } else {
-            dayAttributes.highlight = {
-              color: 'pink',
-              fillMode: 'outline',
-            };
-          }
-          return dayAttributes; 
-      });
+      habitFetched: false,
     }
-  },
+  }, 
   created: async function() {
     let habit = await getHabit(this.habitId);
     this.habit = habit;
-    let user = await getUser();
-    this.userId= user.id;
-    console.log(this.userId);
-    this.members = habit.members;
-    this.logs = habit.logs;
-    for (let thisUserId in this.logs) {
-      let loggedDates = this.logs[thisUserId]; 
-      loggedDates.map(date => this.days.push({
-        id: dayjs(date).format('YYYY-MM-DD'), date: date, userId: thisUserId }))
-    }
-  },
-  methods: {
-    onDayClick(day) {
-      console.log(day);
-      if (day.date > new Date()) { return; }
-      const index = this.days.findIndex(d => (d.id === day.id) 
-      && (d.userId === this.userId));
-      console.log(index);
-      if (index >= 0) {
-        this.days.splice(index, 1);
-        updateLog(this.habitId, day.date, 'delete').then(() => {
-          console.log('Request to delete log sent successfully');
-        })
-        .catch(err => {
-          console.log(err);
-        })
-      } else {
-        this.days.push({
-          id: day.id,
-          date: day.date,
-          userId: this.userId
-        });
-        updateLog(this.habitId, day.date, 'add').then(() => {
-          console.log('Request to log date sent successfully');
-        })
-        .catch(err => {
-          console.log(err);
-        })
-      }
-    }
+    this.habitFetched = true;
   }
 }
 </script>
 
 <!-- "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1 {
-    margin-top: 100px;
-    font-size: 60px;
-}
-.progress-log {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-#calendar { 
-}
+
 .invite-habit {
   position: fixed;
   right: 100px;

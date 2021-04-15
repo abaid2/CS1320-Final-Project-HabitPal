@@ -1,7 +1,10 @@
 <template>
   <div class="invitation">
     <h3> {{invitation.title}} </h3>
-    <button class="btn btn-primary accept-btn" @click="handleAccept">Accept</button>
+    <div id="options">
+      <button class="btn btn-primary accept-btn" @click="handleResponse('accept')">Join</button>
+      <button class="btn btn-light delete-btn" @click="handleResponse('delete')">Delete</button>
+    </div>
   </div>
 </template>
 
@@ -11,13 +14,16 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
-async function acceptInvitation(habitId) {
+async function handleInvitationResponse(habitId, response) {
   //alert(username);
   
   return new Promise((resolve, reject) => {
     const toSend = {
-      habitId: habitId
+      habitId: habitId,
+      response: response
     }; 
+
+    console.log(toSend);
 
     const config = {
       headers: {
@@ -36,7 +42,7 @@ async function acceptInvitation(habitId) {
       location.reload();
     })
     .catch(err => {
-      alert("accept invitation failed");
+      alert("Handle invitation failed");
       reject(err);
     });
   });
@@ -49,27 +55,45 @@ export default {
       invitation: Object
   },
   methods: {
-      handleAccept() {
-        const habitId = this.invitation.id;
-        acceptInvitation(habitId);
-      }
+    handleResponse(response) {
+      const habitId = this.invitation.id;
+      handleInvitationResponse(habitId, response);
+    }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+h3 {
+  font-size: 25px;
+}
 .invitation {
-  width: 400px;
-  height: 80px;
+  width: 24vw;
   display: flex;
-  background-color: #f8f8f8;
-  align-items: center;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: baseline;
+  /* background-color: red; */
+  border-bottom: 1px solid #dadde1;
   padding: 15px;
 }
 
-.accept-btn {
-  position: absolute;
-  right: 0;
+#options {
+  width: 50%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
+.btn {
+  width: 80px;
+  font-size: 1vw;
+}
+.accept-btn {
+}
+
+.delete-btn {
+  border: 1px solid #dadde1;
+}
+
 </style>
