@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <button class="friends-btn"  @click="expanded=!expanded"><img class="freinds-img" src="../../resources/icons8-user-group-2-64.png"><span v-show="requests.length" class="badge badge-primary badge-requests">{{requests.length}}</span></button>
-        <div :style="{visibility: expanded ? 'visible' : 'hidden'}" class="friends">
+        <div v-show="expanded" class="friends">
             <h3>Friends: {{friends.length}}</h3>
             <div class="friends-list">
               <Friend class="friend" v-for="friend in friends" :friend="friend" :key="friend.id" />

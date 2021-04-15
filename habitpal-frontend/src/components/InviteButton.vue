@@ -4,7 +4,7 @@
         <div class="friends-list">
           <div class="friend" v-for="friend in filteredFriends" :key="friend.id">
             <div class="check-container" >
-              <input class="check" type="checkbox" value="" @change="addToList($event, friend.email)">
+              <input class="check" type="checkbox" value="" @change="addToList($event, friend.id)">
             </div>
             <h3>{{friend.username}}</h3>
           </div>  
@@ -45,7 +45,6 @@ async function inviteFriend(id, habitId) {
     )
     .then(res => {
       resolve(res.data);
-      location.reload();
     })
     .catch(err => {
       reject(err);
@@ -70,7 +69,8 @@ export default {
       async handleInvite() {
           let habitId = this.$route.params.id;
           for (let i=0; i<this.toInvite.length; i++) {
-            await inviteFriend(this.toInvite[i], habitId)
+            console.log(this.toInvite[i]);
+            await inviteFriend(this.toInvite[i], habitId);
           }
           this.expand = false;
       },
