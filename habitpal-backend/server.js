@@ -10,7 +10,7 @@ const dbConfig = require('./app/config/DBConfig');
 mongoose.Promise = global.Promise
 mongoose.connect(dbConfig.url, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
 
-const { getHabits, addHabit, inviteFriend, getInvitations, handleInviteResponse, getFriends, addFriend, getFriendRequests, sendFriendRequest, getHabit, updateLog } = require('./app/controllers/HabitController');
+const { getHabits, addHabit, inviteFriend, getInvitations, handleInviteResponse, getFriends, addFriend, getFriendRequests, sendFriendRequest, getHabit, updateLog, deleteHabit } = require('./app/controllers/HabitController');
 const { RegisterUser, LoginUser, LogoutUser, getUserDetails } = require('./app/controllers/AuthController');
 const { auth } = require('./app/middleware/auth')
 
@@ -44,5 +44,7 @@ app.post('/accept', auth, handleInviteResponse);
 app.get('/habit', auth, getHabit);
 
 app.post('/log', auth, updateLog);
+
+app.post('/delete', auth, deleteHabit)
 
 app.listen(port, () => console.log(`Server listening on http://localhost:${port}`));

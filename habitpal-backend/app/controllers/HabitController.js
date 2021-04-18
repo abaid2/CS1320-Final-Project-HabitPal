@@ -3,7 +3,7 @@ const habitsData = require('../data/habits.js');
 const { Habit } = require('../models/HabitModel.js');
 const { User } = require('../models/UserModel');
 
-exports.getHabits = (req, res) => {
+exports.getHabits = async(req, res) => {
     let habits = [];
     Habit.find({ 'members': req.user._id }, (err, habit_list) => {
         for (let i = 0; i < habit_list.length; i++) {
@@ -201,4 +201,46 @@ exports.sendFriendRequest = async(req, res) => {
         success: true,
         message: 'Successfully Sent Friend Request',
     })
+}
+
+exports.deleteHabit = async(req, res) => {
+    let habitId = req.body.habitId;
+    let userId = req.user._id;
+    let user = await User.findOne({'_id': userId});
+    for (let i = 0; i < user.habits.length; i++) {
+        if (user.habits[i].equals(habitId)) {
+            user.habits.splice(i, 1);
+            break;
+        }
+    }
+    user.save();
+    let habit = await Habit.findOne({'_id': habitId});
+    for (let i = 0; i < habit.members.length; i++) {
+        if (habit.members[i].equals(userId)) {
+            habit.members.splice(i, 1);
+            break;
+        }
+    }
+    habit.logs.set(userId, undefined);
+    habit.save();
+    if (habit.members.length == 0) {
+        Habit.deleteOne({'_id': habitId}, function(err, result) {
+            if (err) {
+                return res.status(200).json({
+                    success: true,
+                    message: 'Successfully Deleted',
+                })
+            } else {
+                return res.status(200).json({
+                    success: true,
+                    message: 'Successfully Deleted',
+                })
+            }
+        })
+    } else {
+        return res.status(200).json({
+            success: true,
+            message: 'Successfully Deleted',
+        })
+    }
 }
