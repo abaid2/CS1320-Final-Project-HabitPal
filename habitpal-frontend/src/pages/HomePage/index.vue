@@ -84,7 +84,6 @@ export default {
   },
   watch: {
     numCompleted: function() {
-      console.log('test');
       this.sortedHabits = this.habits.sort((a,b) => {
         if (a.completed && b.completed) {
           return 0;

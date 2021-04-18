@@ -13,7 +13,25 @@
                 </div>
                 <div class="form-input description">
                     <textarea placeholder="Description" v-model="description" name="password" class="form-control" />
-                </div>    
+                </div>
+                <div class="select-container">
+                  <label for="interval-select" class="select-label">Select the interval for this habit:</label>
+                  <select class="form-select" aria-label="Interval select" id="interval-select" v-model="interval">
+                    <option value="day" selected>Daily</option>
+                    <option value="3day">Every 3 days</option>
+                    <option value="week">Weekly</option>
+                    <option value="month">Monthly</option>
+                  </select>
+                </div>
+                <div class="select-container">
+                  <label for="timeout-select" class="select-label">Select when you want this habit to timeout:</label>
+                  <select class="form-select" aria-label="Timeout select" id="timeout-select" v-model="timeout">
+                    <option value="never" selected>Never</option>
+                    <option value="1day">In 24 hours</option>
+                    <option value="7day">In a week</option>
+                    <option value="month">In a month</option>
+                  </select> 
+                </div>
                 <div>
                     <button class="btn btn-success create-btn">Create Habit</button>
                 </div>
@@ -27,11 +45,13 @@ import axios from 'axios';
 
 axios.defaults.withCredentials = true;
 
-async function createHabit(title, description) {
+async function createHabit(title, description, interval, timeout) {
   return new Promise((resolve, reject) => {
     const toSend = {
       title: title,
-      description: description
+      description: description,
+      interval: interval,
+      timeout: timeout
     }; 
 
     const config = {
@@ -62,17 +82,21 @@ export default {
       return {
           title: '',
           description: '',
+          interval: 'day',
+          timeout: 'never',
           expand: false
       }
   },
   methods: {
       handleCreate() {
-        const { title, description } = this;
+        const { title, description, interval, timeout } = this;
           if (title && description) {
-              createHabit(title, description)
+              createHabit(title, description, interval, timeout)
               .then(() => {
                   this.title = '';
                   this.description = '';
+                  this.interval = 'day';
+                  this.timeout = 'never';
                   this.expand = false;
               });
           }
@@ -87,9 +111,16 @@ export default {
 #form-content {
   padding: 40px;
 }
+
 form {
   background-color: white;
   border-radius: 8px;
+}
+
+select {
+  height: min-content;
+  align-self: center;
+  margin-left: 20px;
 }
 
 label {
@@ -132,6 +163,15 @@ textarea {
   justify-content: center;
 }
 
+.select-container {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.select-label {
+  font-size: 24px;
+  margin: 0px;
+}
 
 .close-btn {
   color: #214278;
