@@ -4,7 +4,7 @@
       <div class="expand-container">
         <button class="expand-btn"  @click="handleExpand($event)" @mouseenter="hoverChild=true" @mouseout="hoverChild=false"><img class="expand-img" src="../../resources/icons8-expand-arrow-52.png"></button>
       </div>  
-      <h2 class="title" v-bind:class="{completetitle: completed}"> {{habit.title}} </h2>
+      <h2 class="title" v-bind:class="{completetitle: completed || !toComplete}"> {{habit.title}} </h2>
       <div class="check-container" >
         <input v-model="completed" class="complete-check checkbox-circle" type="checkbox" value="" @click="$event.stopPropagation()" @change="handleComplete($event)" @mouseenter="hoverChild=true" @mouseout="hoverChild=false">
       </div>  
@@ -76,11 +76,52 @@ export default {
       return {
           expanded: false,
           hoverChild: false,
-          completed: false
+          completed: false,
+          user: '',
+          toComplete: false
       }
   },
   props: {
       habit: Object
+  },
+  watch: {
+    user: function() {
+      if (this.user) {
+        const interval = this.$props.habit.interval;
+        if (interval == 'day') {
+          this.toComplete = true;
+        }
+        const userLogs = this.$props.habit.logs[this.user.id];
+        if (!userLogs.length) {
+          this.toComplete = true;
+        }
+        const sortedLogs = userLogs.sort((a,b) => {
+          const dateA = new Date(a);
+          const dateB = new Date(b);
+          if (dateA > dateB) {
+            return -1;
+          } else if (dateA < dateB) {
+            return 1;
+          } else {
+            return 0
+          }
+        });
+        const mostRecent = new Date(sortedLogs[0]);
+        const date = new Date();
+        if (interval === '3day') {
+          date.setDate(date.getDate() - 3);
+        } else if (interval === 'week') {
+          date.setDate(date.getDate() - 7);
+        } else if (interval === 'month') {
+          date.setMonth(date.getMonth() - 1);
+        }
+        if (date < mostRecent) {
+          this.toComplete = false;
+        } else {
+          this.toComplete = true;
+        }
+      }
+    }
   },
   methods: {
     goToHabit() {
@@ -106,6 +147,7 @@ export default {
     const today = new Date();
     const date = today.toISOString().slice(0,11) + '04:00:00.000Z';
     const user = await getUser();
+    this.user = user;
     this.completed = this.$props.habit.logs[user.id].includes(date);
     this.$emit('complete', this.completed);
   }

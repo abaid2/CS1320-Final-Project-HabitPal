@@ -13,9 +13,20 @@ exports.getHabits = async(req, res) => {
                 title: curr.title,
                 description: curr.description,
                 created_at: curr.created_at,
+                interval: curr.interval,
+                timeout: curr.timeout,
                 members: curr.members,
                 logs: curr.logs,
             });
+        }
+        for (let i=habits.length-1; i >= 0; i--) {
+            if (habits[i].timeout) {
+                if (habits[i].timeout < Date.now()) {
+                    console.log(`deleting habit: ${habits[i].title}`);
+                    //TODO: delete habit
+                    habits.splice(i, 1);
+                }
+            }
         }
         res.send(habits);
     });
@@ -43,6 +54,22 @@ exports.getInvitations = async(req, res) => {
 
 exports.addHabit = async(req, res) => {
     req.body.logs = {};
+    const timeout = req.body.timeout;
+    if (timeout == 'never') {
+        req.body.timeout = null;
+    } else if (timeout === '1day') {
+        const time = new Date();
+        time.setDate(time.getDate() + 1);
+        req.body.timeout = time;
+    } else if (timeout === '7day') {
+        const time = new Date();
+        time.setDate(time.getDate() + 7);
+        req.body.timeout = time;
+    } else if (timeout === 'month') {
+        const time = new Date();
+        time.setMonth(time.getMonth() + 1);
+        req.body.timeout = time;
+    }
     const habit = new Habit(req.body);
     habit.members.push(req.user._id);
     habit.logs.set(req.user._id, []);
