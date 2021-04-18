@@ -16,6 +16,12 @@ const habitSchema = mongoose.Schema({
     },
     members: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
     logs: { type: Map, of: Array },
+    timeout: { type: Date },
+    interval: { 
+        type: String,
+        enum: ['day', '3day', 'week', 'month'],
+        required: [true, 'The interval field is required!']
+    }
 });
 
 const Habit = mongoose.model('Habit', habitSchema);

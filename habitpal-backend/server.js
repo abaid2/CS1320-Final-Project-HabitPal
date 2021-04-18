@@ -23,6 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors({ origin: true, credentials: true }));
 
+
 app.post('/users/register', RegisterUser);
 app.post('/users/login', LoginUser);
 app.get('/users/auth', auth, getUserDetails);
