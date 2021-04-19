@@ -224,9 +224,14 @@ h3 {
   cursor: pointer;
 }
 
-.active {
-
+.inactive:hover {
+    color: rgb(65, 65, 65);
 }
+
+.active {
+  color: #2e89ff;
+}
+
 .friends {
   font-size: 15px;
   width: 100%
