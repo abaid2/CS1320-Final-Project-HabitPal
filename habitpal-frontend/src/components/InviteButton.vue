@@ -10,10 +10,10 @@
           </div>  
         </div>
         <div class="form-group">
-          <button class="btn btn-primary user-invite">Invite</button>
+          <button class="btn btn-primary user-invite" @click="expand=false">Invite</button>
         </div>
       </form>
-      <button class="add btn btn-primary" @click="expand=!expand">+</button>
+      <button class="btn btn-primary" @click="expand=true" v-show="!expand">Invite Friends</button>
   </div>
 </template>
 

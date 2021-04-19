@@ -66,6 +66,7 @@ h3 {
 }
 .friend {
   width: 24vw;
+  max-width: 250px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -83,7 +84,6 @@ h3 {
 }
 
 .btn {
-  width: 80px;
   font-size: 1vw;
 }
 .accept-btn {
