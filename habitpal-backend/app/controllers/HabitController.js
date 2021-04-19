@@ -1,5 +1,4 @@
 const e = require('express');
-const habitsData = require('../data/habits.js');
 const { Habit } = require('../models/HabitModel.js');
 const { User } = require('../models/UserModel');
 
@@ -22,8 +21,7 @@ exports.getHabits = async(req, res) => {
         for (let i=habits.length-1; i >= 0; i--) {
             if (habits[i].timeout) {
                 if (habits[i].timeout < Date.now()) {
-                    console.log(`deleting habit: ${habits[i].title}`);
-                    //TODO: delete habit
+                    deleteHabitHelper(habits[i]._id, req.user._id);
                     habits.splice(i, 1);
                 }
             }
@@ -230,9 +228,7 @@ exports.sendFriendRequest = async(req, res) => {
     })
 }
 
-exports.deleteHabit = async(req, res) => {
-    let habitId = req.body.habitId;
-    let userId = req.user._id;
+async function deleteHabitHelper(habitId, userId) {
     let user = await User.findOne({'_id': userId});
     for (let i = 0; i < user.habits.length; i++) {
         if (user.habits[i].equals(habitId)) {
@@ -249,25 +245,18 @@ exports.deleteHabit = async(req, res) => {
         }
     }
     habit.logs.set(userId, undefined);
-    habit.save();
+    await habit.save();
     if (habit.members.length == 0) {
-        Habit.deleteOne({'_id': habitId}, function(err, result) {
-            if (err) {
-                return res.status(200).json({
-                    success: true,
-                    message: 'Successfully Deleted',
-                })
-            } else {
-                return res.status(200).json({
-                    success: true,
-                    message: 'Successfully Deleted',
-                })
-            }
-        })
-    } else {
-        return res.status(200).json({
-            success: true,
-            message: 'Successfully Deleted',
-        })
+        Habit.deleteOne({ '_id': habitId });
     }
+}
+
+exports.deleteHabit = async(req, res) => {
+    let habitId = req.body.habitId;
+    let userId = req.user._id;
+    deleteHabitHelper(habitId, userId);
+    return res.status(200).json({
+        success: true,
+        message: 'Successfully Deleted',
+    });
 }
