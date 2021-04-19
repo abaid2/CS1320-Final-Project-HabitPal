@@ -2,14 +2,18 @@
   <button class="habit btn" v-bind:class="{ hoverless: hoverChild }" @click="goToHabit">
     <div class="title-container" >
       <div class="expand-container">
-        <button class="expand-btn"  @click="handleExpand($event)" @mouseenter="hoverChild=true" @mouseout="hoverChild=false"><img class="expand-img" src="../../resources/icons8-expand-arrow-52.png"></button>
+        <button class="expand-btn"  @click="handleExpand($event)" @mouseenter="hoverChild=true" @mouseout="hoverChild=false"><img class="expand-img" v-bind:class="{rotated: expanded}" src="../../../resources/icons8-expand-arrow-52.png"></button>
       </div>  
       <h2 class="title" v-bind:class="{completetitle: completed || !toComplete}"> {{habit.title}} </h2>
       <div class="check-container" >
         <input v-model="completed" class="complete-check checkbox-circle" type="checkbox" value="" @click="$event.stopPropagation()" @change="handleComplete($event)" @mouseenter="hoverChild=true" @mouseout="hoverChild=false">
       </div>  
     </div>  
-    <p v-show="expanded"> {{ habit.description }} </p>
+    <p v-show="expanded"> 
+      {{ habit.description }}<br/>
+      <span class="habit-info">This habit should be completed every {{ intervalMsg }}</span><br/>
+      <span class="habit-info">{{ timeoutMsg }}</span>
+    </p>
   </button>
 </template>
 
@@ -83,6 +87,42 @@ export default {
   },
   props: {
       habit: Object
+  },
+  computed: {
+    intervalMsg: function() {
+      if (this.habit.interval === '3day') {
+        return '3 days';
+      } else {
+        return this.habit.interval;
+      }
+    },
+    timeoutMsg: function() {
+      if (!this.habit.timeout) {
+        return 'It is set to never timeout';
+      } else {
+        const timeoutDate = new Date(this.habit.timeout);
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        if (timeoutDate < tomorrow) {
+          //expires within 24 hours
+          const now = new Date();
+          const timeDiff = timeoutDate.getTime() - now.getTime();
+          const minutes = Math.floor(timeDiff / (1000 * 60));
+          if (minutes <= 60) {
+            const plural = minutes > 1 ? 's' : '';
+            return `It will timeout in ${minutes} minute${plural}`;
+          } else {
+            const remainingMins = minutes % 60;
+            const minPl = remainingMins > 1 ? 's' : '';
+            const hours = (minutes - remainingMins) / 60;
+            const hourPl = hours > 1 ? 's' : '';
+            return `It will timeout in ${hours} hour${hourPl} and ${remainingMins} minute${minPl}`;
+          }
+        } else {
+          return `It will timeout on ${timeoutDate.toLocaleDateString()}`;
+        }
+      }
+    }
   },
   watch: {
     user: function() {
@@ -206,6 +246,11 @@ button:hover {
   box-shadow: none;
 }
 
+.rotated {
+  transform: rotate(180deg); 
+  transform-origin: center;
+}
+
 .title {
   flex: 7;
   text-align: left;
@@ -231,12 +276,15 @@ button:hover {
 }
 
 .expand-img {
-    height: 30px;
-    width: 30px;
+  height: 30px;
+  width: 30px;
 }
 
 .expand-img:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
+.habit-info {
+  color: #e67a00;
+}
 </style>

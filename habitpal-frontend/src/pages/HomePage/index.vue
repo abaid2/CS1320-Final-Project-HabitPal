@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import Habit from '../../components/Habit';
+import Habit from './Habit';
 import Header from '../../components/Header';
 import Friends from '../../components/Friends';
 import AddButton from '../../components/AddButton';
@@ -128,7 +128,6 @@ export default {
     this.sortedHabits = habits;
     let friends = await getFriends();
     this.friends = friends;
-    console.log(friends);
   },
   watch: {
     numCompleted: function() {

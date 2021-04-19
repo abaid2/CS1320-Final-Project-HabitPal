@@ -42,7 +42,7 @@ exports.LoginUser = (req, res) => {
                                 //saving token to cookie
                             res.cookie('authToken', user.token, {
                                 sameSite: 'none',
-                                maxAge: 24 * 60 * 60 * 24,
+                                maxAge: 3 * 60 * 60 * 1000,
                                 secure: true
                             }).status(200).json({
                                 success: true,
