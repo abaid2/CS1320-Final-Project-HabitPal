@@ -5,6 +5,7 @@
                 <div class="form-group">
                     <input type="email" v-model="email" name="email" class="form-control registerinput" placeholder="Email address"/>
                     <div v-show="submitted && !email" class="invalid-feedback">Email is required</div>
+                    <div v-show="submitted && email && !realEmail" class="invalid-feedback">Email does not exist</div>
                 </div>
                 <div class="form-group">
                     <input type="text" v-model="username" name="username" class="form-control registerinput" placeholder="Username"/>
@@ -67,6 +68,7 @@ export default {
           username: '',
           password: '',
           passwordConfirm: '',
+          realEmail: true,
           submitted: false
       }
   },
@@ -78,6 +80,9 @@ export default {
               signUp(email, username, password)
               .then(() => {
                   this.$router.push({ name: 'Login' });
+              }, 
+              () => {
+                  this.realEmail = false;
               });
           }
       }

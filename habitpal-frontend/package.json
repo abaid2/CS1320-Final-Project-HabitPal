@@ -14,6 +14,7 @@
     "chart.js": "^2.9.4",
     "core-js": "^3.6.5",
     "dayjs": "^1.10.4",
+    "deep-email-validator": "^0.1.18",
     "v-calendar": "^2.3.0",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.1",

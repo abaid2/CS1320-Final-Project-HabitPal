@@ -1,6 +1,24 @@
 const { User } = require('../models/UserModel');
+const emailValidator = require('deep-email-validator');
+ 
+async function isEmailValid(email) {
+ return emailValidator.validate({
+    email: email,
+    sender: email,
+    validateRegex: true,
+    validateMx: true,
+    validateTypo: true,
+    validateDisposable: true,
+    validateSMTP: false,
+  });
+}
 
 exports.RegisterUser = async(req, res) => {
+    const email = req.body.email;
+    const {valid, reason, validators} = await isEmailValid(email);
+    if (!valid) {
+        return res.status(400).json({ success: false, message: 'Invalid email!', reason: `${reason}` });
+    }
     const user = new User(req.body);
     await user.save((err, doc) => {
         if (err) {

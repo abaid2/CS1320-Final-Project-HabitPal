@@ -21,7 +21,7 @@ exports.getHabits = async(req, res) => {
         for (let i=habits.length-1; i >= 0; i--) {
             if (habits[i].timeout) {
                 if (habits[i].timeout < Date.now()) {
-                    deleteHabitHelper(habits[i]._id, req.user._id);
+                    deleteHabitHelper(habits[i].id, req.user._id);
                     habits.splice(i, 1);
                 }
             }
@@ -218,6 +218,9 @@ exports.getFriendRequests = async(req, res) => {
 exports.sendFriendRequest = async(req, res) => {
     userId = req.user._id;
     let other = await User.findOne({'email': req.body.email});
+    if (!other) {
+        return res.status(400).json({ success: false, message: 'User not found!' });
+    }
     if (!other.requests.includes(userId)) {
         other.requests.push(userId);
         other.save();
@@ -238,6 +241,9 @@ async function deleteHabitHelper(habitId, userId) {
     }
     user.save();
     let habit = await Habit.findOne({'_id': habitId});
+    if (!habit) {
+        return;
+    }
     for (let i = 0; i < habit.members.length; i++) {
         if (habit.members[i].equals(userId)) {
             habit.members.splice(i, 1);
