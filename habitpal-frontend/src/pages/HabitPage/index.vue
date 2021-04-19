@@ -1,6 +1,7 @@
 <template>
   <div>
     <Header class="header" :title="habit.title"/>
+    <button class="btn btn-danger btn-lg delete-btn" @click="handleDelete">Delete Habit</button>
     <Details v-if="habitFetched" class="calendar" :habitId="habitId" :habit="habit"/>
     <InviteButton class="invite-habit" :friends="friends" :members="members"/>
   </div>
@@ -55,6 +56,34 @@ async function getHabit(habitId) {
       resolve(res.data);
     })
     .catch(err => {
+      alert(err);
+      reject(err);
+    });
+  });
+}
+
+async function deleteHabit(habitId) {
+  return new Promise((resolve, reject) => {
+    const toSend = {
+      habitId: habitId
+    }; 
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        'Access-Control-Allow-Origin': '*',
+      }
+    }
+
+    axios.post(
+        'http://localhost:8080/delete',
+        JSON.stringify(toSend),
+        config
+    )
+    .then(res => {
+      resolve(res.data);
+    })
+    .catch(err => {
       reject(err);
     });
   });
@@ -84,6 +113,12 @@ export default {
     let friends = await getFriends();
     this.friends = friends;
     this.members = habit.members;
+  }, 
+  methods: {
+      async handleDelete() {
+          await deleteHabit(this.habitId);
+          this.$router.push({ name: 'Home' });
+      }
   }
 }
 </script>
@@ -95,5 +130,12 @@ export default {
   position: fixed;
   right: 100px;
   bottom: 100px;
+}
+
+.delete-btn {
+  position: fixed;
+  right: 45%;
+  top: 125px;
+  font-size: 20px;
 }
 </style>
