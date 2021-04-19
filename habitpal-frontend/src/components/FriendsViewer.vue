@@ -1,8 +1,8 @@
 <template>
     <div class="wrapper">
-        <button class="friends-btn"  @click="expanded=!expanded">
-            <i class="fas fa-user-friends fa-2x friends-img" />
-            <span v-show="requests.length" class="badge badge-danger badge-requests">{{requests.length}}</span>
+        <button class="friends-btn"  @click="viewFriendRequests()">
+          <i class="fas fa-user-friends fa-2x friends-img" v-bind:class="[expanded ? 'active' : 'inactive']"/>
+          <span v-show="requests.length" class="badge badge-danger badge-requests">{{requests.length}}</span>
         </button>
         <div v-show="expanded" class="friends">
             <!-- <div class="friends-list">
@@ -49,33 +49,6 @@ async function getFriendRequests() {
   });
 }
 
-async function sendFriendRequest(email) {
-  return new Promise((resolve, reject) => {
-    const toSend = {
-      email: email,
-    }; 
-
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        'Access-Control-Allow-Origin': '*',
-      }
-    }
-
-    axios.post(
-        'http://localhost:8080/friends/requests',
-        JSON.stringify(toSend),
-        config
-    )
-    .then(res => {
-      resolve(res.data);
-    })
-    .catch(err => {
-      reject(err);
-    });
-  });
-}
-
 export default {
   name: 'FriendsViewer',
   props: {
@@ -85,29 +58,20 @@ export default {
       return {
           requests: [],
           expanded: false,
-          expandAdd: false,
-          friendEmail: ""
       }
   },
   components: {
       // Friend,
       FriendRequest
   },
-  methods: {
-      handleRequestFriend() {
-          if (this.friendEmail) {
-              sendFriendRequest(this.friendEmail)
-              .then(() => {
-                  this.friendEmail = "";
-                  this.expand = false;
-              });
-          }
-          this.expandAdd = false;
-      }
-  },
   created: async function() {
     let requests = await getFriendRequests();
     this.requests = requests;
+  }, 
+  methods: {
+    viewFriendRequests() {
+      if (this.requests.length) { this.expanded = !this.expanded; }
+    }
   }
 }
 </script>
@@ -139,18 +103,18 @@ h3 {
 }
 
 .friends-img {
+  cursor: pointer;
+}
+.inactive {
     color: floralwhite;
 }
 
-.friends-list {
-  background-color: #f8f8f8;
-  max-height: 400px;
-  overflow-y: auto;
+.inactive:hover {
+    color: #dae5ff;
 }
 
-.friends-img:hover {
-    cursor: pointer;
-    color: #dae5ff;
+.active {
+  color: #2e89ff;
 }
 
 .friends {
@@ -166,12 +130,7 @@ h3 {
 }
 
 
-.friend {
-    margin-bottom: 5px;
-    border-bottom: 1px solid black;
-}
-
-.friend:last-child{
+.friend:last-child {
     border: none;
 }
 

@@ -122,14 +122,14 @@ export default {
         let user = await getUser();
         this.userId= user.id;
         for (let thisUserId in this.logs) {
-        let loggedDates = this.logs[thisUserId]; 
-        loggedDates.map(date => this.days.push({
+          let loggedDates = this.logs[thisUserId]; 
+          loggedDates.map(date => this.days.push({
             id: dayjs(date).format('YYYY-MM-DD'), date: date, userId: thisUserId }))
         }
     },
     methods: {
         onDayClick(day) {
-        console.log(day);
+        // console.log(this.logs[this.userId] = );
         if (day.date > new Date()) { return; }
         const index = this.days.findIndex(d => (d.id === day.id) 
         && (d.userId === this.userId));

@@ -16,13 +16,15 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
 .friend {
-  width: 400px;
-  height: 40px;
+  padding: 5px;
+  width: 100%;
   display: flex;
-  background-color: transparent;
-  align-items: center;
-  justify-content: center;
-  padding: 15px;
 }
+h3 {
+  font-size: 25px;
+  font-variation-settings: 'wght' 500;
+}
+
 </style>

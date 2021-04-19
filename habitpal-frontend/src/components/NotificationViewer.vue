@@ -1,7 +1,7 @@
 <template>
     <div>
         <button class="notification-btn" @click="viewNotifications()">
-          <i class="fas fa-bell fa-2x" v-bind:class="[expanded ? 'active' : 'inactive']"></i>
+          <i class="fas fa-bell fa-2x bell-img" v-bind:class="[expanded ? 'active' : 'inactive']"></i>
           <span v-show="invitations.length" class="badge badge-danger badge-invite">{{invitations.length}}</span>
         </button>
         <div v-show="expanded" class="invitations">
@@ -73,12 +73,15 @@ export default {
   box-shadow: none;
 }
 
+.bell-img {
+  cursor: pointer;
+}
+
 .inactive {
     color: floralwhite;
 }
 
 .inactive:hover {
-    cursor: pointer;
     color: #dae5ff;
 }
 
@@ -98,6 +101,9 @@ export default {
     padding: 2px;
 }
 
+.invite:last-child {
+  border: none;
+}
 /* .invite {
     margin-bottom: 5px;
 } */
