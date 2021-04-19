@@ -258,6 +258,12 @@ button:hover {
   font-weight: bold;
 }
 
+@media only screen and (max-width: 1400px) {
+  .title {
+    font-size: 2.5vw;
+  }
+}
+
 .completetitle {
   color: slategrey;
 }

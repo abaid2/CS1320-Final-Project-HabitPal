@@ -9,7 +9,7 @@
       <form @submit.prevent="handleCreate" v-show="expand" autocomplete="off">
             <div id="form-content">
                 <div class="form-input text">
-                    <input type="text" placeholder="Title" v-model="title" name="email" class="form-control" />
+                    <input type="text" placeholder="Title" v-model="title" name="email" class="form-control" maxlength="28"/>
                 </div>
                 <div class="form-input description">
                     <textarea placeholder="Description" v-model="description" name="password" class="form-control" />
