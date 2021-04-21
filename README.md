@@ -5,7 +5,7 @@ Open a terminal and cd into the habitpal-backend directory. Then run `npm instal
 
 Open another terminal and cd into the habitpal-frontend directory. Then run `npm install` followed by `npm run serve`.
 
-Now, you can open up a browser and enter the url https://localhost:8081/.
+Now, you can proceed to https://localhost:8081/.
 
 
 ## Division of labour
