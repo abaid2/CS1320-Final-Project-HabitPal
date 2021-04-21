@@ -12,3 +12,6 @@ Now, you can proceed to https://localhost:8081/.
 
 ### mdeetman
 I worked on setting up the login and register pages with user authentication in the backend. I also created the MongoDB models for the user and habit collections. I also worked on functionality for adding new habits, adding friends, and inviting friends to a habit (although i did not work on the backend implementation of invitations). I also created many of the frontend pages and components although I did not spend time styling them.
+
+### yliang6
+I worked on the backend for setting up individual habit pages. I also worked on parts of the invitation feature and habit deletion feature.
