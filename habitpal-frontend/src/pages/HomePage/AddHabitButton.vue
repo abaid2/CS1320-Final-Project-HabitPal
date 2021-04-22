@@ -77,7 +77,7 @@ async function createHabit(title, description, interval, timeout) {
 }
 
 export default {
-  name: 'AddButton',
+  name: 'AddHabitButton',
   data () {
       return {
           title: '',

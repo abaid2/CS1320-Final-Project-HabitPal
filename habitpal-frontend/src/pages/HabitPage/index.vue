@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header class="header" :title="habit.title"/>
+    <Header class="header" :title="habit.title" :showBack="true"/>
     <button class="btn btn-danger btn-lg delete-btn" @click="handleDelete">Leave Habit</button>
     <Details v-if="habitFetched" class="calendar" :habitId="habitId" :habit="habit"/>
     <InviteButton class="invite-habit" :friends="friends" :members="members"/>
@@ -9,9 +9,9 @@
 
 <script>
 
-import InviteButton from '../../components/InviteButton';
-import Header from '../../components/Header';
-import Details from '../../components/Details';
+import InviteButton from './InviteButton';
+import Header from '../../components/Header/Header';
+import Details from './Details';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;

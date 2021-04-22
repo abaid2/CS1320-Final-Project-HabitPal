@@ -86,10 +86,9 @@ h3 {
   flex-direction: row;
   justify-content: space-between;
 }
+
 .btn {
   font-size: 1vw;
-}
-.accept-btn {
 }
 
 .delete-btn {

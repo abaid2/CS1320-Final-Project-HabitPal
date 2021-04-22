@@ -2,6 +2,7 @@
     <div id="header-container">
       <div id="home-header">
         <Logout class="logout"/>
+        <router-link to="/home" class="back-link" v-show="showBack"><button class="btn btn-primary btn-lg back-btn">Back</button></router-link>
         <h1>{{title}}</h1>
         <div id="icons">
           <NotificationViewer class="invitation-viewer icon"/>
@@ -20,7 +21,8 @@ export default {
   name: 'Header',
   props: {
       title: String,
-      friends: Array
+      friends: Array,
+      showBack: Boolean
   },
   components: {
     Logout,
@@ -43,7 +45,6 @@ h1 {
   position: fixed;
   top: 0;
   width: 100%;
-  margin-bottom:
 }
 
 #home-header {
@@ -64,4 +65,12 @@ h1 {
   padding: 20px;
 }
 
+.back-btn {
+  font-size: 20px;
+}
+
+.back-link {
+  position: absolute;
+  left: 200px;
+}
 </style>

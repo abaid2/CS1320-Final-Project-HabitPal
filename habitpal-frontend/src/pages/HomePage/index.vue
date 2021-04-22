@@ -19,16 +19,16 @@
     </div>
     <div class="habits">
         <Habit v-for="habit in sortedHabits" :habit="habit" :key="habit.id" @complete="handleComplete(habit, $event)"/>
-        <AddButton class="add-habit"/>
+        <AddHabitButton class="add-habit"/>
     </div>
   </div>
 </template>
 
 <script>
 import Habit from './Habit';
-import Header from '../../components/Header';
-import Friends from '../../components/Friends';
-import AddButton from '../../components/AddButton';
+import Header from '../../components/Header/Header';
+import Friends from './Friends';
+import AddHabitButton from './AddHabitButton';
 import axios from 'axios';
 
 axios.defaults.withCredentials = true;
@@ -120,7 +120,7 @@ export default {
     Habit,
     Header,
     Friends,
-    AddButton,
+    AddHabitButton,
   },
   created: async function() {
     let habits = await getHabits();
